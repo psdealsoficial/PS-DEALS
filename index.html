@@ -2,136 +2,367 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>PS Deals | Las mejores ofertas, cerca de ti.</title>
 
     <!-- Bootstrap -->
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap Icons -->
-
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-    <!-- Google Font -->
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
     <!-- CSS -->
-
     <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
-<!-- =========================
-        NAVBAR
-========================== -->
 
-<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <!-- ========================= -->
+    <!-- NAVBAR -->
+    <!-- ========================= -->
 
-    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
 
-        <a class="navbar-brand fw-bold fs-3" href="#">
+        <div class="container">
 
-            PS <span class="text-primary">Deals</span>
+            <a class="navbar-brand fw-bold" href="#">
+                <span class="logo-blue">PS</span> Deals
+            </a>
 
-        </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#menu">
 
-        <button class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
 
-            <span class="navbar-toggler-icon"></span>
+            </button>
 
-        </button>
+            <div class="collapse navbar-collapse" id="menu">
 
-        <div class="collapse navbar-collapse"
-            id="menu">
+                <ul class="navbar-nav ms-auto">
 
-            <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Inicio</a>
+                    </li>
 
-                <li class="nav-item">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Categorías</a>
+                    </li>
 
-                    <a class="nav-link" href="#">Inicio</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Ofertas</a>
+                    </li>
 
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li>
 
-                <li class="nav-item">
+                </ul>
 
-                    <a class="nav-link" href="#">Ofertas</a>
-
-                </li>
-
-                <li class="nav-item">
-
-                    <a class="nav-link" href="#">Categorías</a>
-
-                </li>
-
-                <li class="nav-item">
-
-                    <a class="nav-link" href="#">Contacto</a>
-
-                </li>
-
-            </ul>
+            </div>
 
         </div>
 
+    </nav>
+
+    <!-- ========================= -->
+    <!-- HERO -->
+    <!-- ========================= -->
+
+    <section class="hero">
+
+        <div class="container">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-6">
+
+                    <span class="badge bg-primary mb-3 p-2">
+                        🔥 Ofertas actualizadas diariamente
+                    </span>
+
+                    <h1>
+
+                        Las mejores ofertas
+
+                        <span class="text-primary">
+
+                            cerca de ti.
+
+                        </span>
+
+                    </h1>
+
+                    <p>
+
+                        Encuentra productos originales para tecnología,
+                        hogar, herramientas, gaming y mucho más al mejor
+                        precio.
+
+                    </p>
+
+                    <a href="#" class="btn btn-primary btn-lg">
+
+                        Ver ofertas
+
+                    </a>
+
+                    <a href="#" class="btn btn-outline-dark btn-lg">
+
+                        Contáctanos
+
+                    </a>
+
+                </div>
+
+                <div class="col-lg-6 text-center">
+
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=700"
+                        class="img-fluid hero-image">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- BENEFICIOS -->
+    <!-- ========================= -->
+
+    <section class="benefits">
+
+        <div class="container">
+
+            <div class="row text-center">
+
+                <div class="col-md-3">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    <h5>
+
+                        Compra Segura
+
+                    </h5>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <i class="bi bi-truck"></i>
+
+                    <h5>
+
+                        Entrega Local
+
+                    </h5>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <i class="bi bi-patch-check"></i>
+
+                    <h5>
+
+                        Productos Originales
+
+                    </h5>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <i class="bi bi-chat-dots"></i>
+
+                    <h5>
+
+                        Atención Personalizada
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- CATEGORÍAS -->
+    <!-- ========================= -->
+
+    <section class="categories">
+
+        <div class="container">
+
+            <h2 class="text-center mb-5">
+
+                Categorías
+
+            </h2>
+
+            <div class="row g-4">
+
+                <div class="col-md-3">
+
+                    <div class="card category-card">
+
+                        <i class="bi bi-laptop"></i>
+
+                        <h4>Tecnología</h4>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card category-card">
+
+                        <i class="bi bi-house"></i>
+
+                        <h4>Hogar</h4>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card category-card">
+
+                        <i class="bi bi-tools"></i>
+
+                        <h4>Herramientas</h4>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card category-card">
+
+                        <i class="bi bi-controller"></i>
+
+                        <h4>Gaming</h4>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- PRODUCTOS -->
+    <!-- ========================= -->
+
+    <section class="products">
+
+        <div class="container">
+
+            <h2 class="text-center mb-5">
+<!-- BUSCADOR -->
+
+<div class="row mb-4">
+
+    <div class="col-lg-8">
+
+        <input
+            type="text"
+            id="buscador"
+            class="form-control form-control-lg"
+            placeholder="🔍 Buscar producto...">
+
     </div>
 
-</nav>
-<section class="hero">
+    <div class="col-lg-4">
 
-    <div class="container text-center">
+        <select
+            id="categoria"
+            class="form-select form-select-lg">
 
-        <h1>
+            <option value="Todos">Todas las categorías</option>
 
-            Las mejores ofertas
+            <option>Tecnología</option>
 
-            <span class="text-primary">
+            <option>Audio</option>
 
-                cerca de ti.
+            <option>Hogar</option>
 
-            </span>
+            <option>Herramientas</option>
 
-        </h1>
-
-        <p>
-
-            Tecnología, hogar, herramientas y mucho más.
-
-        </p>
-
-        <button class="btn btn-primary btn-lg">
-
-            Ver Ofertas
-
-        </button>
-
-        <button class="btn btn-outline-dark btn-lg">
-
-            Contactar
-
-        </button>
+        </select>
 
     </div>
 
-</section>
+</div>
+                Productos Destacados
 
+            </h2>
 
+            <div class="row g-4" id="contenedorProductos">
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/app.js"></script>
+            </div>
 
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="container text-center">
+
+            <h3>
+
+                PS Deals
+
+            </h3>
+
+            <p>
+
+                Las mejores ofertas, cerca de ti.
+
+            </p>
+
+            <p>
+
+                © 2026 Todos los derechos reservados.
+
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="data/productos.js"></script>
+
+    <script src="js/render.js"></script>
+
+    <script src="js/app.js"></script>
+    
 </body>
 
 </html>
