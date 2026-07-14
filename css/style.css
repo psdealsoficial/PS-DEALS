@@ -1,0 +1,74 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f8fafc;
+}
+
+/* =====================
+   NAVBAR
+===================== */
+
+.navbar{
+
+    padding:18px 0;
+
+}
+
+.navbar-brand{
+
+    font-size:32px;
+
+}
+
+.nav-link{
+
+    margin-left:20px;
+
+    font-weight:500;
+
+}
+
+/* =====================
+      HERO
+===================== */
+
+.hero{
+
+    padding:120px 0;
+
+}
+
+.hero h1{
+
+    font-size:64px;
+
+    font-weight:700;
+
+    margin-bottom:25px;
+
+}
+
+.hero p{
+
+    font-size:22px;
+
+    margin-bottom:35px;
+
+    color:#666;
+
+}
+
+.btn{
+
+    margin:10px;
+
+    padding:14px 35px;
+
+    border-radius:10px;
+
+}
