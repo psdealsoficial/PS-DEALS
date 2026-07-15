@@ -10,49 +10,65 @@ function mostrarProductos(lista) {
 
         const ahorro = producto.antes - producto.precio;
 
+        const descuento = Math.round(
+        (ahorro / producto.antes) * 100
+    );
+
         contenedor.innerHTML += `
 
 <div class="col-lg-4 mb-4">
 
 <div class="card product-card h-100">
 
-<img src="${producto.imagen}" class="card-img-top">
+<img
+    src="${producto.imagen}"
+    class="card-img-top"
+    alt="${producto.nombre}">
 
 <div class="card-body d-flex flex-column">
 
-<span class="badge bg-primary mb-2">
-${producto.categoria}
-</span>
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-<h5>${producto.nombre}</h5>
+        <span class="badge bg-danger">
+            -${descuento}% OFF
+        </span>
 
-<p>
+        <span class="badge ${producto.disponible ? 'bg-success' : 'bg-secondary'}">
+    ${producto.disponible ? 'Disponible' : 'Agotado'}
+        </span>
 
-<s>$${producto.antes.toLocaleString()}</s>
+    </div>
 
-</p>
+    <h5 class="fw-bold">
+        ${producto.nombre}
+    </h5>
 
-<h3 class="text-primary">
+    <p class="text-secondary mb-2">
+        ${producto.categoria}
+    </p>
 
-$${producto.precio.toLocaleString()}
+    <p class="text-muted mb-1">
+        Antes:
+        <s>$${producto.antes.toLocaleString()}</s>
+    </p>
 
-</h3>
+    <h3 class="text-primary fw-bold">
+        $${producto.precio.toLocaleString()}
+    </h3>
 
-<p class="text-success">
+    <p class="text-success fw-semibold mb-3">
+        💰 Ahorras $${ahorro.toLocaleString()}
+    </p>
 
-Ahorras $${ahorro.toLocaleString()}
+    <button
+        class="btn btn-success mt-auto"
+        onclick="enviarWhatsApp(${producto.id})">
 
-</p>
+        📲 Pedir por WhatsApp
 
-<button
-class="btn btn-primary mt-auto">
+    </button>
 
-Ver oferta
-
-</button>
-
-</div>
-
+    </div>
 </div>
 
 </div>
