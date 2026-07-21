@@ -25,3 +25,13 @@
 - Semáforo de salud del negocio para flujo, rentabilidad, inventario y cobranza.
 - Recomendaciones automáticas sobre categorías, clientes e inventario detenido.
 - Detección de clientes inactivos, productos sin movimiento y riesgo de agotamiento.
+
+## v3.5.1 — Pulido y productividad
+- Búsqueda global de módulos, productos y clientes (`Ctrl + K`).
+- Atajos: F2 Ventas, F3 búsqueda local, F4 Clientes, F7 Compras, F8 Gastos y F9 Reportes.
+- Sistema global de mensajes toast disponible mediante `PSToast()`.
+- Aviso de cambios sin guardar en formularios.
+- Apertura directa de productos y clientes desde la búsqueda global.
+- Botón para duplicar productos conservando datos comerciales y solicitando SKU nuevo.
+- Protección contra doble envío al registrar ventas.
+- Ajustes adaptables para móvil.

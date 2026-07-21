@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/actividad.css"><script src="js/auth.js"></script>
+<link rel="stylesheet" href="css/productividad-global.css">
 </head><body><div class="app-shell">
 <aside id="sidebar" class="sidebar"><div class="sidebar-brand"><a href="dashboard.html"><span class="brand-mark">PS</span><span><strong>PS Deals</strong><small>Actividad del sistema</small></span></a><button id="btnCerrarSidebar" class="btn-cerrar-sidebar"><i class="bi bi-x-lg"></i></button></div>
 <nav class="sidebar-nav"><span class="sidebar-label">Principal</span>
@@ -20,4 +21,5 @@
 <section class="summary-grid"><article><i class="bi bi-calendar-check"></i><div><small>Hoy</small><strong id="eventosHoy">0</strong></div></article><article><i class="bi bi-people"></i><div><small>Usuarios activos</small><strong id="usuariosActivos">0</strong></div></article><article><i class="bi bi-shield-check"></i><div><small>Accesos</small><strong id="eventosAcceso">0</strong></div></article><article><i class="bi bi-pencil-square"></i><div><small>Operaciones</small><strong id="eventosOperacion">0</strong></div></article></section>
 <section class="toolbar-card"><div class="search-box"><i class="bi bi-search"></i><input id="busqueda" placeholder="Buscar usuario, acción o detalle"></div><select id="filtroUsuario" class="form-select"><option value="">Todos los usuarios</option></select><select id="filtroTipo" class="form-select"><option value="">Todos los tipos</option><option value="acceso">Accesos</option><option value="ventas">Ventas</option><option value="inventario">Inventario</option><option value="clientes">Clientes</option><option value="finanzas">Finanzas</option><option value="usuarios">Usuarios</option><option value="sistema">Sistema</option></select><input id="fechaDesde" type="date" class="form-control"><input id="fechaHasta" type="date" class="form-control"><button id="btnLimpiar" class="btn btn-light"><i class="bi bi-eraser"></i> Limpiar</button></section>
 <section class="activity-card"><div class="section-header"><div><span class="section-kicker">Historial</span><h3>Actividad reciente</h3></div><span id="contador" class="counter">0 resultados</span></div><div id="timeline" class="timeline"></div><div id="paginacion" class="pagination-wrap"></div></section>
-</div></main></div><script src="js/actividad.js"></script></body></html>
+</div></main></div><script src="js/actividad.js"></script><script src="js/productividad-global.js"></script>
+</body></html>

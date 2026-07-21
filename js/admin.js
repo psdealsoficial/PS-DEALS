@@ -359,6 +359,17 @@ function renderizarTabla() {
 
                     <button
                         type="button"
+                        class="btn btn-sm btn-outline-secondary me-1"
+                        onclick="duplicarProducto(${producto.id})"
+                        title="Duplicar producto">
+
+                        <i class="bi bi-copy"></i>
+                        Duplicar
+
+                    </button>
+
+                    <button
+                        type="button"
                         class="btn btn-sm btn-outline-danger"
                         onclick="eliminarProducto(${producto.id})">
 
@@ -449,6 +460,37 @@ document.getElementById("stockMinimo").value =
         top: 0,
         behavior: "smooth"
     });
+}
+
+function duplicarProducto(id) {
+    const original = productos.find(item => Number(item.id) === Number(id));
+    if (!original) return;
+
+    productoEditandoId = null;
+    document.getElementById("nombre").value = `${original.nombre} (copia)`;
+    document.getElementById("categoria").value = original.categoria || "";
+    document.getElementById("descripcion").value = original.descripcion || "";
+    document.getElementById("sku").value = "";
+    document.getElementById("proveedor").value = original.proveedor || "";
+    document.getElementById("costo").value = Number(original.costo || 0);
+    document.getElementById("stock").value = 0;
+    document.getElementById("stockMinimo").value = Number(original.stockMinimo || 2);
+    document.getElementById("precio").value = Number(original.precio || 0);
+    document.getElementById("precioAnterior").value = Number(original.antes || original.precio || 0);
+    document.getElementById("imagen").value = original.imagen || "img/productos/sin-imagen.jpg";
+    document.getElementById("estrellas").value = Number(original.estrellas || 5);
+    document.getElementById("opiniones").value = 0;
+    document.getElementById("envio").value = original.envio || "";
+    document.getElementById("nuevo").checked = true;
+    document.getElementById("destacado").checked = false;
+    document.getElementById("disponible").checked = false;
+
+    const botonGuardar = formProducto.querySelector('button[type="submit"]');
+    botonGuardar.innerHTML = '<i class="bi bi-copy"></i> Guardar copia';
+    actualizarVistaPrevia();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => document.getElementById("sku").focus(), 350);
+    window.PSToast?.("Completa un SKU nuevo y guarda la copia.", "info", "Producto duplicado");
 }
 
 function eliminarProducto(id) {

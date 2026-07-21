@@ -487,8 +487,15 @@ function actualizarResumen() {
     btnCobrar.disabled = carrito.length === 0;
 }
 
+let ventaProcesando = false;
 formVenta.addEventListener("submit", evento => {
     evento.preventDefault();
+    if (ventaProcesando) {
+        window.PSToast?.("La venta ya se está procesando.", "warning");
+        return;
+    }
+    ventaProcesando = true;
+    setTimeout(() => { ventaProcesando = false; }, 1200);
 
     if (!carrito.length) {
         mostrarMensaje("Agrega al menos un producto al carrito.", "warning");
