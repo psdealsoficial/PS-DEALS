@@ -20,13 +20,14 @@
     "cuentas-cobrar.html": "cobrar",
     "reportes.html": "reportes",
     "configuracion.html": "configuracion",
+    "diagnostico.html": "diagnostico",
     "usuarios.html": "usuarios"
   };
 
   const ROLES = {
     Administrador: [
       "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
-      "gastos","clientes","cobrar","reportes","configuracion","usuarios"
+      "gastos","clientes","cobrar","reportes","configuracion","diagnostico","usuarios"
     ],
     Supervisor: [
       "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
@@ -235,6 +236,21 @@
     localStorage.setItem(clave, "ok");
   }
 
+  function migrarPermisosV361() {
+    const clave = "psdeals_migracion_v361";
+    if (localStorage.getItem(clave) === "ok") return;
+    const usuarios = asegurarAdministrador();
+    let cambio = false;
+    usuarios.forEach(usuario => {
+      if (usuario.rol === "Administrador") {
+        if (!Array.isArray(usuario.permisos)) usuario.permisos = [];
+        if (!usuario.permisos.includes("diagnostico")) { usuario.permisos.push("diagnostico"); cambio = true; }
+      }
+    });
+    if (cambio) guardar(K_USUARIOS, usuarios);
+    localStorage.setItem(clave, "ok");
+  }
+
   function activarRegistroAutomatico() {
     if (window.__psRegistroStorageActivo) return;
     window.__psRegistroStorageActivo = true;
@@ -330,6 +346,7 @@
   };
 
   migrarPermisosV34();
+  migrarPermisosV361();
   activarRegistroAutomatico();
   protegerPagina();
 })();

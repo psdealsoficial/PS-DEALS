@@ -14,31 +14,9 @@
 </head>
 <body>
 <div class="app-shell">
-<aside id="sidebar" class="sidebar">
-  <div class="sidebar-brand">
-    <a href="dashboard.html"><span class="brand-mark">PS</span><span><strong>PS Deals</strong><small>Panel de control</small></span></a>
-    <a href="notificaciones.html" class="nav-link"><i class="bi bi-bell-fill"></i><span>Notificaciones</span></a>
-    <a href="actividad.html" class="nav-link"><i class="bi bi-clock-history"></i><span>Actividad</span></a>
-    <button id="btnCerrarSidebar" class="btn-cerrar-sidebar"><i class="bi bi-x-lg"></i></button>
-  </div>
-  <nav class="sidebar-nav">
-    <span class="sidebar-label">Principal</span>
-    <a href="dashboard.html" class="nav-link"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
-    <a href="ventas.html" class="nav-link"><i class="bi bi-cart-check-fill"></i><span>Caja y ventas</span></a>
-    <a href="apartados.html" class="nav-link"><i class="bi bi-bookmark-check-fill"></i><span>Apartados</span></a>
-    <a href="devoluciones.html" class="nav-link"><i class="bi bi-arrow-counterclockwise"></i><span>Devoluciones</span></a>
-    <a href="admin.html" class="nav-link"><i class="bi bi-box-seam-fill"></i><span>Inventario</span></a>
-    <a href="compras.html" class="nav-link active"><i class="bi bi-bag-check-fill"></i><span>Compras</span></a>
-    <a href="clientes.html" class="nav-link"><i class="bi bi-people-fill"></i><span>Clientes</span></a>
-    <a href="cuentas-cobrar.html" class="nav-link"><i class="bi bi-credit-card-2-front-fill"></i><span>Cuentas por cobrar</span></a>
-    <a href="reportes.html" class="nav-link"><i class="bi bi-bar-chart-fill"></i><span>Reportes</span></a>
-    <a href="configuracion.html" class="nav-link"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
-            <a href="usuarios.html" class="nav-link"><i class="bi bi-person-lock"></i><span>Usuarios</span></a>
-    <a href="index.html" class="nav-link"><i class="bi bi-shop"></i><span>Ver tienda</span></a>
-  </nav>
-  <div class="sidebar-footer"><div class="status-dot"></div><div><strong>Sistema local</strong><small>Datos guardados en este equipo</small></div></div>
-</aside>
-<div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+<div id="psSidebarMount" data-component="sidebar"></div>
+<script src="js/component-loader.js"></script>
+<script>window.PSComponents.loadSidebar();</script>
 
 <main class="main-content">
 <header class="topbar">

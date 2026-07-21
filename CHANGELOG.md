@@ -35,3 +35,14 @@
 - Botón para duplicar productos conservando datos comerciales y solicitando SKU nuevo.
 - Protección contra doble envío al registrar ventas.
 - Ajustes adaptables para móvil.
+
+## v3.6 — Arquitectura modular (Fase 1)
+- Se creó un componente central para el menú lateral.
+- Se añadió carga modular y selección automática del módulo activo.
+- Se centralizó la navegación de once páginas administrativas.
+- Se mantuvieron sin cambios los módulos con estructura especializada para evitar regresiones.
+
+## v3.6.1 — Developer Center
+- Nueva pantalla de diagnóstico visible.
+- Pruebas automáticas de sidebar, componentes, sesión, permisos, almacenamiento y páginas principales.
+- Reporte técnico copiable.
