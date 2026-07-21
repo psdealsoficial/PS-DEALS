@@ -9,6 +9,7 @@
   const MODULOS = {
     "dashboard.html": "dashboard",
     "notificaciones.html": "notificaciones",
+    "actividad.html": "actividad",
     "ventas.html": "ventas",
     "apartados.html": "apartados",
     "devoluciones.html": "devoluciones",
@@ -24,16 +25,16 @@
 
   const ROLES = {
     Administrador: [
-      "dashboard","notificaciones","ventas","apartados","devoluciones","inventario","compras",
+      "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
       "gastos","clientes","cobrar","reportes","configuracion","usuarios"
     ],
     Supervisor: [
-      "dashboard","notificaciones","ventas","apartados","devoluciones","inventario","compras",
+      "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
       "gastos","clientes","cobrar","reportes"
     ],
-    Cajero: ["dashboard","notificaciones","ventas","apartados","devoluciones","clientes","cobrar"],
-    Vendedor: ["dashboard","notificaciones","ventas","apartados","clientes"],
-    Almacen: ["dashboard","notificaciones","inventario","compras"]
+    Cajero: ["dashboard","notificaciones","actividad","ventas","apartados","devoluciones","clientes","cobrar"],
+    Vendedor: ["dashboard","notificaciones","actividad","ventas","apartados","clientes"],
+    Almacen: ["dashboard","notificaciones","actividad","inventario","compras"]
   };
 
   function leer(clave, respaldo) {
@@ -214,6 +215,69 @@
       .replaceAll('"', "&quot;");
   }
 
+
+  function migrarPermisosV34() {
+    const clave = "psdeals_migracion_v34";
+    if (localStorage.getItem(clave) === "ok") return;
+    const usuarios = asegurarAdministrador();
+    let cambio = false;
+    usuarios.forEach(usuario => {
+      const predeterminados = ROLES[usuario.rol] || [];
+      if (predeterminados.includes("actividad")) {
+        if (!Array.isArray(usuario.permisos)) usuario.permisos = [];
+        if (!usuario.permisos.includes("actividad")) {
+          usuario.permisos.push("actividad");
+          cambio = true;
+        }
+      }
+    });
+    if (cambio) guardar(K_USUARIOS, usuarios);
+    localStorage.setItem(clave, "ok");
+  }
+
+  function activarRegistroAutomatico() {
+    if (window.__psRegistroStorageActivo) return;
+    window.__psRegistroStorageActivo = true;
+    const original = Storage.prototype.setItem;
+    const ignorar = new Set([K_BITACORA, K_SESION, "psdeals_notificaciones_leidas", "psdeals_migracion_v34"]);
+    const etiquetas = {
+      psdeals_productos: "Inventario actualizado",
+      psdeals_ventas: "Ventas actualizadas",
+      psdeals_clientes: "Clientes actualizados",
+      psdeals_compras: "Compras actualizadas",
+      psdeals_gastos: "Gastos actualizados",
+      psdeals_cuentas_cobrar: "Cobranza actualizada",
+      psdeals_apartados: "Apartados actualizados",
+      psdeals_devoluciones: "Devoluciones actualizadas",
+      psdeals_configuracion: "Configuración actualizada"
+    };
+    Storage.prototype.setItem = function(clave, valor) {
+      const anterior = this.getItem(clave);
+      original.call(this, clave, valor);
+      if (this !== localStorage || ignorar.has(clave) || anterior === valor || !etiquetas[clave]) return;
+      let detalle = "Datos guardados";
+      try {
+        const antes = JSON.parse(anterior || "null");
+        const despues = JSON.parse(valor || "null");
+        if (Array.isArray(despues)) {
+          const prev = Array.isArray(antes) ? antes.length : 0;
+          detalle = `${despues.length} registros (${despues.length - prev >= 0 ? "+" : ""}${despues.length - prev})`;
+        }
+      } catch {}
+      const usuario = usuarioActual();
+      const bitacora = leer(K_BITACORA, []);
+      bitacora.push({
+        id: Date.now() + Math.floor(Math.random() * 1000),
+        fecha: new Date().toISOString(),
+        usuarioId: usuario?.id || null,
+        usuario: usuario?.nombre || "Sistema",
+        accion: etiquetas[clave],
+        detalle
+      });
+      original.call(localStorage, K_BITACORA, JSON.stringify(bitacora.slice(-2500)));
+    };
+  }
+
   function protegerPagina() {
     asegurarAdministrador();
     const pagina = paginaActual();
@@ -265,5 +329,7 @@
     iniciarSesion, cerrarSesion, escapeHTML
   };
 
+  migrarPermisosV34();
+  activarRegistroAutomatico();
   protegerPagina();
 })();
