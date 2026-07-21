@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configuración | PS Deals</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/configuracion.css">
+<script src="js/auth.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+<aside id="sidebar" class="sidebar">
+    <div class="sidebar-brand">
+        <a href="dashboard.html">
+            <span class="brand-mark">PS</span>
+            <span><strong>PS Deals</strong><small>Panel de control</small></span>
+        </a>
+
+        <button id="btnCerrarSidebar" class="btn-cerrar-sidebar" aria-label="Cerrar menú">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <span class="sidebar-label">Principal</span>
+
+        <a href="dashboard.html" class="nav-link"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+        <a href="ventas.html" class="nav-link"><i class="bi bi-cart-check-fill"></i><span>Caja y ventas</span></a>
+    <a href="apartados.html" class="nav-link"><i class="bi bi-bookmark-check-fill"></i><span>Apartados</span></a>
+    <a href="devoluciones.html" class="nav-link"><i class="bi bi-arrow-counterclockwise"></i><span>Devoluciones</span></a>
+        <a href="admin.html" class="nav-link"><i class="bi bi-box-seam-fill"></i><span>Inventario</span></a>
+        <a href="compras.html" class="nav-link"><i class="bi bi-bag-check-fill"></i><span>Compras</span></a>
+    <a href="gastos.html" class="nav-link"><i class="bi bi-wallet-fill"></i><span>Gastos y caja</span></a>
+        <a href="clientes.html" class="nav-link"><i class="bi bi-people-fill"></i><span>Clientes</span></a>
+        <a href="cuentas-cobrar.html" class="nav-link"><i class="bi bi-credit-card-2-front-fill"></i><span>Cuentas por cobrar</span></a>
+        <a href="reportes.html" class="nav-link"><i class="bi bi-bar-chart-fill"></i><span>Reportes</span></a>
+        <a href="configuracion.html" class="nav-link active"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+            <a href="usuarios.html" class="nav-link"><i class="bi bi-person-lock"></i><span>Usuarios</span></a>
+        <a href="index.html" class="nav-link"><i class="bi bi-shop"></i><span>Ver tienda</span></a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="status-dot"></div>
+        <div><strong>Sistema local</strong><small>Datos guardados en este equipo</small></div>
+    </div>
+</aside>
+
+<div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+<main class="main-content">
+
+<header class="topbar">
+    <div class="d-flex align-items-center gap-3">
+        <button id="btnAbrirSidebar" class="btn-menu" aria-label="Abrir menú">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <div>
+            <span class="topbar-subtitle">Administración del sistema</span>
+            <h1 class="topbar-title">Configuración y respaldo</h1>
+        </div>
+    </div>
+
+    <button id="btnGuardarTodo" class="btn btn-primary">
+        <i class="bi bi-floppy-fill"></i>
+        Guardar cambios
+    </button>
+</header>
+
+<div class="content-wrapper">
+
+<section class="hero">
+    <div>
+        <span class="hero-badge"><i class="bi bi-shield-check"></i> Seguridad de datos</span>
+        <h2>Personaliza PS Deals y protege tu información</h2>
+        <p>Configura los datos del negocio, el ticket de venta y crea respaldos completos.</p>
+    </div>
+
+    <div class="hero-state">
+        <span>Último respaldo</span>
+        <strong id="ultimoRespaldo">Nunca</strong>
+    </div>
+</section>
+
+<section class="row g-4 mt-1">
+
+<div class="col-xl-7">
+<article class="panel-card h-100">
+    <div class="panel-header">
+        <div><span class="panel-kicker">Negocio</span><h3>Información general</h3></div>
+    </div>
+
+    <form id="formNegocio">
+        <div class="row g-3">
+            <div class="col-md-7">
+                <label class="form-label">Nombre comercial</label>
+                <input id="negocioNombre" class="form-control" maxlength="100" placeholder="PS Deals">
+            </div>
+
+            <div class="col-md-5">
+                <label class="form-label">Slogan</label>
+                <input id="negocioSlogan" class="form-control" maxlength="120" placeholder="Las mejores ofertas, cerca de ti">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Teléfono / WhatsApp</label>
+                <input id="negocioTelefono" class="form-control" maxlength="25">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Correo</label>
+                <input id="negocioCorreo" type="email" class="form-control" maxlength="120">
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Dirección</label>
+                <input id="negocioDireccion" class="form-control" maxlength="180">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">RFC</label>
+                <input id="negocioRFC" class="form-control text-uppercase" maxlength="20" placeholder="Opcional">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">WhatsApp para tickets</label>
+                <input id="negocioWhatsApp" class="form-control" maxlength="20" placeholder="Ej. 4921234567">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Redes sociales / sitio</label>
+                <input id="negocioRedes" class="form-control" maxlength="150" placeholder="@psdealsoficial">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Moneda</label>
+                <select id="negocioMoneda" class="form-select">
+                    <option value="MXN">Peso mexicano (MXN)</option>
+                    <option value="USD">Dólar (USD)</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Impuesto predeterminado</label>
+                <div class="input-group">
+                    <input id="negocioImpuesto" type="number" class="form-control" min="0" max="100" step="0.01">
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Stock bajo predeterminado</label>
+                <input id="stockMinimoDefault" type="number" class="form-control" min="0" step="1">
+            </div>
+        </div>
+    </form>
+</article>
+</div>
+
+<div class="col-xl-5">
+<article class="panel-card h-100">
+    <div class="panel-header">
+        <div><span class="panel-kicker">Ticket</span><h3>Datos de impresión</h3></div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12">
+            <label class="form-label">Encabezado del ticket</label>
+            <textarea id="ticketEncabezado" class="form-control" rows="3" maxlength="250"></textarea>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">Mensaje final</label>
+            <textarea id="ticketPie" class="form-control" rows="3" maxlength="250"></textarea>
+        </div>
+
+        <div class="col-12">
+            <div class="form-check form-switch setting-switch">
+                <input id="ticketMostrarTelefono" class="form-check-input" type="checkbox">
+                <label class="form-check-label" for="ticketMostrarTelefono">Mostrar teléfono en ticket</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-check form-switch setting-switch">
+                <input id="ticketMostrarDireccion" class="form-check-input" type="checkbox">
+                <label class="form-check-label" for="ticketMostrarDireccion">Mostrar dirección en ticket</label>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Papel predeterminado</label>
+            <select id="ticketTamano" class="form-select"><option value="58">58 mm</option><option value="80">80 mm</option></select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Logo del ticket</label>
+            <input id="ticketLogo" class="form-control" maxlength="250" placeholder="img/logo/Logo.png">
+        </div>
+
+        <div class="col-12">
+            <div class="form-check form-switch setting-switch">
+                <input id="ticketMostrarQR" class="form-check-input" type="checkbox">
+                <label class="form-check-label" for="ticketMostrarQR">Mostrar código QR</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-check form-switch setting-switch">
+                <input id="ticketMostrarCodigo" class="form-check-input" type="checkbox">
+                <label class="form-check-label" for="ticketMostrarCodigo">Mostrar código de barras del folio</label>
+            </div>
+        </div>
+    </div>
+</article>
+</div>
+
+</section>
+
+<section class="row g-4 mt-1">
+
+<div class="col-xl-7">
+<article class="panel-card h-100">
+    <div class="panel-header">
+        <div><span class="panel-kicker">Respaldo</span><h3>Exportar e importar información</h3></div>
+    </div>
+
+    <div class="backup-grid">
+        <button id="btnExportarTodo" class="backup-action">
+            <i class="bi bi-cloud-arrow-down-fill"></i>
+            <span><strong>Exportar respaldo completo</strong><small>Productos, ventas, clientes, cuentas, compras y configuración</small></span>
+        </button>
+
+        <label class="backup-action backup-upload">
+            <i class="bi bi-cloud-arrow-up-fill"></i>
+            <span><strong>Importar respaldo</strong><small>Selecciona un archivo JSON generado por PS Deals</small></span>
+            <input id="archivoRespaldo" type="file" accept=".json,application/json" hidden>
+        </label>
+
+        <button id="btnExportarVentas" class="backup-action">
+            <i class="bi bi-receipt-cutoff"></i>
+            <span><strong>Exportar solo ventas</strong><small>Copia independiente del historial de ventas</small></span>
+        </button>
+
+        <button id="btnExportarInventario" class="backup-action">
+            <i class="bi bi-box-seam-fill"></i>
+            <span><strong>Exportar inventario</strong><small>Productos, precios, costos y existencias</small></span>
+        </button>
+    </div>
+
+    <div id="mensajeRespaldo" class="alert d-none mt-3 mb-0"></div>
+</article>
+</div>
+
+<div class="col-xl-5">
+<article class="panel-card h-100 danger-panel">
+    <div class="panel-header">
+        <div><span class="panel-kicker danger-kicker">Zona de riesgo</span><h3>Mantenimiento</h3></div>
+    </div>
+
+    <div class="danger-action">
+        <div>
+            <strong>Restablecer configuración</strong>
+            <small>Conserva productos, ventas y demás datos.</small>
+        </div>
+        <button id="btnResetConfig" class="btn btn-outline-warning">Restablecer</button>
+    </div>
+
+    <div class="danger-action">
+        <div>
+            <strong>Borrar movimientos comerciales</strong>
+            <small>Elimina ventas, compras, clientes y cuentas por cobrar.</small>
+        </div>
+        <button id="btnBorrarMovimientos" class="btn btn-outline-danger">Borrar movimientos</button>
+    </div>
+
+    <div class="danger-action">
+        <div>
+            <strong>Borrar todos los datos</strong>
+            <small>También elimina inventario y configuración local.</small>
+        </div>
+        <button id="btnBorrarTodo" class="btn btn-danger">Borrar todo</button>
+    </div>
+</article>
+</div>
+
+</section>
+
+<section class="panel-card mt-4">
+    <div class="panel-header">
+        <div><span class="panel-kicker">Diagnóstico</span><h3>Datos almacenados</h3></div>
+        <button id="btnActualizarDiagnostico" class="btn btn-sm btn-outline-dark"><i class="bi bi-arrow-repeat"></i> Actualizar</button>
+    </div>
+
+    <div id="diagnosticoDatos" class="diagnostic-grid"></div>
+</section>
+
+</div>
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="data/productos.js"></script>
+<script src="js/configuracion.js"></script>
+</body>
+</html>

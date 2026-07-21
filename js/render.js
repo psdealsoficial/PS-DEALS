@@ -84,7 +84,9 @@ function mostrarProductos(lista) {
                 <img
                     src="${producto.imagen}"
                     class="card-img-top"
-                    alt="${producto.nombre}">
+                    alt="${producto.nombre}"
+                    onerror="this.onerror=null; this.src='img/productos/sin-imagen.jpg';"
+                >
 
                 <div class="card-body d-flex flex-column">
 

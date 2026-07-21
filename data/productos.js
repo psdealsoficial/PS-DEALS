@@ -1,115 +1,105 @@
-const productos = [
+const productosIniciales = [
+    {
+        id: 1,
+        nombre: "JBL Flip 6",
+        categoria: "Audio",
+        descripcion: "Bocina Bluetooth portátil, resistente al agua y con sonido potente.",
+        precio: 1899,
+        antes: 2499,
+        imagen: "img/productos/jbl-flip-6.jpg",
+        estrellas: 4.8,
+        opiniones: 284,
+        envio: "Entrega Local",
+        nuevo: true,
+        destacado: true,
+        disponible: true
+    },
+    {
+        id: 2,
+        nombre: "SSD Kingston NV2 1TB",
+        categoria: "Tecnología",
+        descripcion: "Unidad de estado sólido NVMe de alta velocidad para computadora o laptop.",
+        precio: 1099,
+        antes: 1399,
+        imagen: "img/productos/ssd-kingston-1tb.jpg",
+        estrellas: 4.7,
+        opiniones: 198,
+        envio: "Entrega Local",
+        nuevo: false,
+        destacado: true,
+        disponible: true
+    },
+    {
+        id: 3,
+        nombre: "Freidora de Aire Ninja",
+        categoria: "Hogar",
+        descripcion: "Freidora de aire de gran capacidad para preparar alimentos con menos aceite.",
+        precio: 2299,
+        antes: 2999,
+        imagen: "img/productos/freidora-ninja.jpg",
+        estrellas: 4.9,
+        opiniones: 326,
+        envio: "Bajo pedido",
+        nuevo: true,
+        destacado: false,
+        disponible: true
+    },
+    {
+        id: 4,
+        nombre: "Taladro Bosch",
+        categoria: "Herramientas",
+        descripcion: "Taladro compacto y potente, ideal para trabajos domésticos y profesionales.",
+        precio: 1499,
+        antes: 1899,
+        imagen: "img/productos/taladro-bosch.jpg",
+        estrellas: 4.6,
+        opiniones: 142,
+        envio: "Entrega Local",
+        nuevo: false,
+        destacado: false,
+        disponible: true
+    },
+    {
+        id: 5,
+        nombre: "PlayStation 5 Slim",
+        categoria: "Gaming",
+        descripcion: "Consola PlayStation 5 Slim con lector de discos.",
+        precio: 10999,
+        antes: 12999,
+        imagen: "img/productos/play5.jpg",
+        estrellas: 4.8,
+        opiniones: 0,
+        envio: "Entrega Local",
+        nuevo: true,
+        destacado: false,
+        disponible: true
+    }
+];
 
-{
-    id:1,
+function obtenerProductos() {
+    const productosGuardados = localStorage.getItem("psdeals_productos");
 
-    nombre:"JBL Flip 6",
+    if (productosGuardados) {
+        try {
+            return JSON.parse(productosGuardados);
+        } catch (error) {
+            console.error("Error al leer productos:", error);
+        }
+    }
 
-    categoria:"Audio",
+    localStorage.setItem(
+        "psdeals_productos",
+        JSON.stringify(productosIniciales)
+    );
 
-    descripcion:"Bocina Bluetooth portátil resistente al agua con sonido potente.",
-
-    precio:1899,
-
-    antes:2499,
-
-    imagen:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600",
-
-    estrellas:4.8,
-
-    opiniones:284,
-
-    envio:"Entrega Local",
-
-    nuevo:true,
-
-    destacado:true,
-
-    disponible:true
-},
-
-{
-    id:2,
-
-    nombre:"SSD Kingston NV2 1TB",
-
-    categoria:"Tecnología",
-
-    descripcion:"SSD NVMe PCIe Gen4 de alto rendimiento para laptops y PC.",
-
-    precio:1499,
-
-    antes:1799,
-
-    imagen:"https://images.unsplash.com/photo-1591799265444-d66432b91588?w=600",
-
-    estrellas:4.9,
-
-    opiniones:541,
-
-    envio:"Entrega Local",
-
-    nuevo:false,
-
-    destacado:true,
-
-    disponible:true
-},
-
-{
-    id:3,
-
-    nombre:"Freidora de Aire Ninja",
-
-    categoria:"Hogar",
-
-    descripcion:"Freidora de aire de gran capacidad para cocinar con menos aceite.",
-
-    precio:2399,
-
-    antes:2999,
-
-    imagen:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600",
-
-    estrellas:4.7,
-
-    opiniones:198,
-
-    envio:"Entrega Local",
-
-    nuevo:true,
-
-    destacado:true,
-
-    disponible:true
-},
-
-{
-    id:4,
-
-    nombre:"Taladro Bosch",
-
-    categoria:"Herramientas",
-
-    descripcion:"Taladro percutor Bosch ideal para trabajos en casa y profesionales.",
-
-    precio:1899,
-
-    antes:2399,
-
-    imagen:"https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600",
-
-    estrellas:4.9,
-
-    opiniones:327,
-
-    envio:"Entrega Local",
-
-    nuevo:false,
-
-    destacado:true,
-
-    disponible:true
+    return [...productosIniciales];
 }
 
-];
+function guardarProductos(productos) {
+    localStorage.setItem(
+        "psdeals_productos",
+        JSON.stringify(productos)
+    );
+}
+
+let productos = obtenerProductos();

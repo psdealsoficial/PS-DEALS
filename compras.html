@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compras y proveedores | PS Deals</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/compras.css">
+<script src="js/auth.js"></script>
+</head>
+<body>
+<div class="app-shell">
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-brand">
+    <a href="dashboard.html"><span class="brand-mark">PS</span><span><strong>PS Deals</strong><small>Panel de control</small></span></a>
+    <button id="btnCerrarSidebar" class="btn-cerrar-sidebar"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="sidebar-label">Principal</span>
+    <a href="dashboard.html" class="nav-link"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+    <a href="ventas.html" class="nav-link"><i class="bi bi-cart-check-fill"></i><span>Caja y ventas</span></a>
+    <a href="apartados.html" class="nav-link"><i class="bi bi-bookmark-check-fill"></i><span>Apartados</span></a>
+    <a href="devoluciones.html" class="nav-link"><i class="bi bi-arrow-counterclockwise"></i><span>Devoluciones</span></a>
+    <a href="admin.html" class="nav-link"><i class="bi bi-box-seam-fill"></i><span>Inventario</span></a>
+    <a href="compras.html" class="nav-link active"><i class="bi bi-bag-check-fill"></i><span>Compras</span></a>
+    <a href="clientes.html" class="nav-link"><i class="bi bi-people-fill"></i><span>Clientes</span></a>
+    <a href="cuentas-cobrar.html" class="nav-link"><i class="bi bi-credit-card-2-front-fill"></i><span>Cuentas por cobrar</span></a>
+    <a href="reportes.html" class="nav-link"><i class="bi bi-bar-chart-fill"></i><span>Reportes</span></a>
+    <a href="configuracion.html" class="nav-link"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+            <a href="usuarios.html" class="nav-link"><i class="bi bi-person-lock"></i><span>Usuarios</span></a>
+    <a href="index.html" class="nav-link"><i class="bi bi-shop"></i><span>Ver tienda</span></a>
+  </nav>
+  <div class="sidebar-footer"><div class="status-dot"></div><div><strong>Sistema local</strong><small>Datos guardados en este equipo</small></div></div>
+</aside>
+<div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+<main class="main-content">
+<header class="topbar">
+  <div class="d-flex align-items-center gap-3">
+    <button id="btnAbrirSidebar" class="btn-menu"><i class="bi bi-list"></i></button>
+    <div><span class="topbar-subtitle">Abastecimiento</span><h1 class="topbar-title">Compras y proveedores</h1></div>
+  </div>
+  <div class="d-flex gap-2">
+    <button id="btnNuevoProveedor" class="btn btn-outline-dark"><i class="bi bi-building-add"></i> Proveedor</button>
+    <button id="btnNuevaCompra" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nueva compra</button>
+  </div>
+</header>
+
+<div class="content-wrapper">
+<section class="hero">
+  <div><span class="hero-badge"><i class="bi bi-truck"></i> Abastecimiento</span>
+    <h2>Registra mercancía y actualiza el inventario</h2>
+    <p>Cada compra recibida incrementa existencias y puede actualizar el costo del producto.</p>
+  </div>
+  <div class="hero-total"><span>Compras del mes</span><strong id="heroComprasMes">$0</strong></div>
+</section>
+
+<section class="row g-4 mt-1">
+  <div class="col-sm-6 col-xl-3"><article class="metric-card"><div class="metric-icon"><i class="bi bi-bag-check-fill"></i></div><span>Compras del mes</span><strong id="statComprasMes">$0</strong><small id="statOperacionesMes">0 operaciones</small></article></div>
+  <div class="col-sm-6 col-xl-3"><article class="metric-card"><div class="metric-icon"><i class="bi bi-box-arrow-in-down"></i></div><span>Unidades recibidas</span><strong id="statUnidades">0</strong><small>Mercancía ingresada</small></article></div>
+  <div class="col-sm-6 col-xl-3"><article class="metric-card"><div class="metric-icon"><i class="bi bi-buildings-fill"></i></div><span>Proveedores</span><strong id="statProveedores">0</strong><small>Directorio registrado</small></article></div>
+  <div class="col-sm-6 col-xl-3"><article class="metric-card"><div class="metric-icon danger"><i class="bi bi-hourglass-split"></i></div><span>Saldo pendiente</span><strong id="statPendiente">$0</strong><small>Por pagar a proveedores</small></article></div>
+</section>
+
+<section class="row g-4 mt-1">
+<div class="col-xl-8">
+<article class="panel-card h-100">
+<div class="panel-toolbar">
+  <div><span class="panel-kicker">Historial</span><h3>Compras registradas</h3></div>
+  <div class="toolbar-filters">
+    <input id="buscarCompras" class="form-control" placeholder="Buscar folio, proveedor o producto">
+    <select id="filtroPago" class="form-select"><option value="todas">Todas</option><option value="Pagada">Pagadas</option><option value="Pendiente">Pendientes</option></select>
+  </div>
+</div>
+<div class="table-responsive"><table class="table compras-table align-middle"><thead><tr><th>Fecha</th><th>Folio</th><th>Proveedor</th><th>Productos</th><th>Pago</th><th class="text-end">Total</th><th class="text-end">Acciones</th></tr></thead><tbody id="tablaCompras"></tbody></table></div>
+</article>
+</div>
+<div class="col-xl-4">
+<article class="panel-card h-100">
+<div class="panel-toolbar"><div><span class="panel-kicker">Directorio</span><h3>Proveedores</h3></div></div>
+<div id="listaProveedores" class="supplier-list"></div>
+</article>
+</div>
+</section>
+</div>
+</main>
+</div>
+
+<div class="modal fade" id="modalProveedor" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0">
+<div class="modal-header"><div><span class="modal-kicker">Directorio</span><h5 class="modal-title fw-bold" id="tituloProveedor">Nuevo proveedor</h5></div><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<form id="formProveedor"><div class="modal-body"><input type="hidden" id="proveedorId"><div class="row g-3">
+<div class="col-12"><label class="form-label">Nombre o empresa</label><input id="proveedorNombre" class="form-control" required></div>
+<div class="col-md-6"><label class="form-label">Teléfono</label><input id="proveedorTelefono" class="form-control"></div>
+<div class="col-md-6"><label class="form-label">Correo</label><input id="proveedorCorreo" type="email" class="form-control"></div>
+<div class="col-12"><label class="form-label">Contacto</label><input id="proveedorContacto" class="form-control"></div>
+<div class="col-12"><label class="form-label">Notas</label><textarea id="proveedorNotas" class="form-control" rows="3"></textarea></div>
+</div><div id="mensajeProveedor" class="alert d-none mt-3 mb-0"></div></div>
+<div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-primary"><i class="bi bi-floppy"></i> Guardar</button></div></form>
+</div></div></div>
+
+<div class="modal fade" id="modalCompra" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"><div class="modal-content border-0">
+<div class="modal-header"><div><span class="modal-kicker">Entrada de mercancía</span><h5 class="modal-title fw-bold">Nueva compra</h5></div><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<form id="formCompra"><div class="modal-body">
+<div class="row g-3 mb-4">
+<div class="col-md-4"><label class="form-label">Proveedor</label><select id="compraProveedor" class="form-select" required></select></div>
+<div class="col-md-3"><label class="form-label">Fecha</label><input id="compraFecha" type="date" class="form-control" required></div>
+<div class="col-md-3"><label class="form-label">Estado de pago</label><select id="compraEstadoPago" class="form-select"><option>Pagada</option><option>Pendiente</option></select></div>
+<div class="col-md-2"><label class="form-label">Documento</label><input id="compraDocumento" class="form-control" placeholder="Factura"></div>
+</div>
+<div class="product-adder">
+<div><label class="form-label">Producto</label><select id="productoCompra" class="form-select"></select></div>
+<div><label class="form-label">Cantidad</label><input id="cantidadCompra" type="number" min="1" value="1" class="form-control"></div>
+<div><label class="form-label">Costo unitario</label><input id="costoCompra" type="number" min="0.01" step="0.01" class="form-control"></div>
+<div class="d-grid align-self-end"><button type="button" id="btnAgregarItem" class="btn btn-dark"><i class="bi bi-plus-lg"></i> Agregar</button></div>
+</div>
+<div class="table-responsive mt-4"><table class="table align-middle"><thead><tr><th>Producto</th><th>Cantidad</th><th>Costo</th><th>Importe</th><th></th></tr></thead><tbody id="tablaItemsCompra"></tbody></table></div>
+<div class="purchase-summary"><span>Total de compra</span><strong id="totalCompra">$0</strong></div>
+<label class="form-label mt-3">Notas</label><textarea id="compraNotas" class="form-control" rows="2"></textarea>
+<div id="mensajeCompra" class="alert d-none mt-3 mb-0"></div>
+</div>
+<div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn btn-success"><i class="bi bi-box-arrow-in-down"></i> Registrar y recibir</button></div></form>
+</div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="data/productos.js"></script>
+<script src="js/compras.js"></script>
+</body>
+</html>

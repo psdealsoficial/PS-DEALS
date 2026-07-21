@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard ejecutivo | PS Deals</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/dashboard.css">
+<script src="js/auth.js"></script>
+</head>
+<body>
+<div class="app-shell">
+<aside id="sidebar" class="sidebar">
+  <div class="sidebar-brand">
+    <a href="dashboard.html"><span class="brand-mark">PS</span><span><strong>PS Deals</strong><small>Panel ejecutivo</small></span></a>
+    <button id="btnCerrarSidebar" class="btn-cerrar-sidebar"><i class="bi bi-x-lg"></i></button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <span class="sidebar-label">Principal</span>
+    <a href="dashboard.html" class="nav-link active"><i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span></a>
+    <a href="notificaciones.html" class="nav-link"><i class="bi bi-bell-fill"></i><span>Notificaciones</span></a>
+    <a href="ventas.html" class="nav-link"><i class="bi bi-cart-check-fill"></i><span>Caja y ventas</span></a>
+    <a href="apartados.html" class="nav-link"><i class="bi bi-bookmark-check-fill"></i><span>Apartados</span></a>
+    <a href="devoluciones.html" class="nav-link"><i class="bi bi-arrow-counterclockwise"></i><span>Devoluciones</span></a>
+    <a href="admin.html" class="nav-link"><i class="bi bi-box-seam-fill"></i><span>Inventario</span></a>
+    <a href="compras.html" class="nav-link"><i class="bi bi-bag-check-fill"></i><span>Compras</span></a>
+    <a href="gastos.html" class="nav-link"><i class="bi bi-wallet-fill"></i><span>Gastos y caja</span></a>
+    <a href="clientes.html" class="nav-link"><i class="bi bi-people-fill"></i><span>Clientes</span></a>
+    <a href="cuentas-cobrar.html" class="nav-link"><i class="bi bi-credit-card-2-front-fill"></i><span>Cuentas por cobrar</span></a>
+    <a href="reportes.html" class="nav-link"><i class="bi bi-bar-chart-fill"></i><span>Reportes</span></a>
+    <a href="configuracion.html" class="nav-link"><i class="bi bi-gear-fill"></i><span>Configuración</span></a>
+    <a href="usuarios.html" class="nav-link"><i class="bi bi-person-lock"></i><span>Usuarios</span></a>
+    <a href="index.html" class="nav-link"><i class="bi bi-shop"></i><span>Ver tienda</span></a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="status-dot"></div>
+    <div><strong>Sistema local</strong><small>Información de este equipo</small></div>
+  </div>
+</aside>
+
+<div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+<main class="main-content">
+<header class="topbar">
+  <div class="d-flex align-items-center gap-3">
+    <button id="btnAbrirSidebar" class="btn-menu"><i class="bi bi-list"></i></button>
+    <div><span id="saludo" class="topbar-subtitle">Bienvenido</span><h1>Dashboard ejecutivo</h1></div>
+  </div>
+  <div class="topbar-actions">
+    <div class="fecha"><i class="bi bi-calendar3"></i><span id="fechaActual"></span></div>
+    <a href="ventas.html" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nueva venta</a>
+  </div>
+</header>
+
+<div class="content-wrapper">
+<section class="executive-hero">
+  <div>
+    <span class="hero-badge"><i class="bi bi-stars"></i> PS Deals v3.0</span>
+    <h2>El pulso completo de tu negocio</h2>
+    <p>Ventas, utilidad, flujo, inventario, cobranza y apartados reunidos en una sola vista.</p>
+  </div>
+  <div class="hero-summary">
+    <span>Resultado del mes</span>
+    <strong id="resultadoMes">$0</strong>
+    <small id="resultadoMesTexto">Ingresos menos compras, gastos y devoluciones</small>
+  </div>
+</section>
+
+<section class="kpi-grid">
+  <article class="kpi-card">
+    <div class="kpi-head"><span class="kpi-icon"><i class="bi bi-cash-stack"></i></span><span id="tendenciaHoy" class="trend neutral">—</span></div>
+    <span>Ventas de hoy</span><strong id="ventasHoy">$0</strong><small id="ventasHoyDetalle">0 operaciones</small>
+  </article>
+  <article class="kpi-card">
+    <div class="kpi-head"><span class="kpi-icon"><i class="bi bi-graph-up-arrow"></i></span><span id="tendenciaMes" class="trend neutral">—</span></div>
+    <span>Ventas del mes</span><strong id="ventasMes">$0</strong><small id="ventasMesDetalle">0 operaciones</small>
+  </article>
+  <article class="kpi-card">
+    <div class="kpi-head"><span class="kpi-icon"><i class="bi bi-piggy-bank-fill"></i></span><span id="margenMes" class="trend neutral">0%</span></div>
+    <span>Utilidad bruta</span><strong id="utilidadMes">$0</strong><small>Después del costo de productos</small>
+  </article>
+  <article class="kpi-card">
+    <div class="kpi-head"><span class="kpi-icon"><i class="bi bi-wallet2"></i></span><span id="flujoEstado" class="trend neutral">—</span></div>
+    <span>Flujo neto del mes</span><strong id="flujoMes">$0</strong><small>Entradas menos salidas registradas</small>
+  </article>
+</section>
+
+<section class="row g-4">
+  <div class="col-xl-8">
+    <article class="panel-card h-100">
+      <div class="panel-header">
+        <div><span class="panel-kicker">Rendimiento</span><h3>Ventas de los últimos 14 días</h3></div>
+        <a href="reportes.html" class="panel-link">Ver reportes <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="chart-wrap"><canvas id="graficaVentas"></canvas></div>
+    </article>
+  </div>
+  <div class="col-xl-4">
+    <article class="panel-card h-100">
+      <div class="panel-header"><div><span class="panel-kicker">Distribución</span><h3>Entradas y salidas del mes</h3></div></div>
+      <div class="chart-donut-wrap"><canvas id="graficaFlujo"></canvas><div class="donut-center"><span>Flujo neto</span><strong id="centroFlujo">$0</strong></div></div>
+      <div id="leyendaFlujo" class="flow-legend"></div>
+    </article>
+  </div>
+</section>
+
+<section class="mini-kpi-grid">
+  <a href="admin.html" class="mini-kpi">
+    <span class="mini-icon blue"><i class="bi bi-boxes"></i></span>
+    <div><small>Unidades disponibles</small><strong id="unidadesStock">0</strong><span id="productosActivos">0 productos activos</span></div>
+  </a>
+  <a href="cuentas-cobrar.html" class="mini-kpi">
+    <span class="mini-icon red"><i class="bi bi-exclamation-circle-fill"></i></span>
+    <div><small>Cartera vencida</small><strong id="carteraVencida">$0</strong><span id="cuentasVencidas">0 cuentas vencidas</span></div>
+  </a>
+  <a href="apartados.html" class="mini-kpi">
+    <span class="mini-icon amber"><i class="bi bi-bookmark-star-fill"></i></span>
+    <div><small>Saldo en apartados</small><strong id="saldoApartados">$0</strong><span id="apartadosActivos">0 apartados activos</span></div>
+  </a>
+  <a href="clientes.html" class="mini-kpi">
+    <span class="mini-icon green"><i class="bi bi-people-fill"></i></span>
+    <div><small>Clientes registrados</small><strong id="clientesTotal">0</strong><span id="clientesNuevos">0 nuevos este mes</span></div>
+  </a>
+</section>
+
+<section class="row g-4">
+  <div class="col-xl-7">
+    <article class="panel-card h-100">
+      <div class="panel-header">
+        <div><span class="panel-kicker">Actividad</span><h3>Últimas ventas</h3></div>
+        <a href="ventas.html" class="panel-link">Abrir caja <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="table-responsive">
+        <table class="table executive-table align-middle">
+          <thead><tr><th>Folio</th><th>Cliente</th><th>Productos</th><th>Método</th><th class="text-end">Total</th></tr></thead>
+          <tbody id="tablaUltimasVentas"></tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+
+  <div class="col-xl-5">
+    <article class="panel-card h-100">
+      <div class="panel-header"><div><span class="panel-kicker">Atención requerida</span><h3>Centro de alertas</h3></div><span id="alertasTotal" class="alert-counter">0</span></div>
+      <div id="listaAlertas" class="alerts-list"></div>
+    </article>
+  </div>
+</section>
+
+<section class="row g-4">
+  <div class="col-xl-4">
+    <article class="panel-card h-100">
+      <div class="panel-header"><div><span class="panel-kicker">Inventario</span><h3>Productos críticos</h3></div><a href="admin.html" class="panel-link">Inventario</a></div>
+      <div id="listaStockBajo" class="rank-list"></div>
+    </article>
+  </div>
+  <div class="col-xl-4">
+    <article class="panel-card h-100">
+      <div class="panel-header"><div><span class="panel-kicker">Ventas</span><h3>Más vendidos del mes</h3></div></div>
+      <div id="listaMasVendidos" class="rank-list"></div>
+    </article>
+  </div>
+  <div class="col-xl-4">
+    <article class="panel-card h-100">
+      <div class="panel-header"><div><span class="panel-kicker">Agenda</span><h3>Próximos vencimientos</h3></div></div>
+      <div id="listaVencimientos" class="rank-list"></div>
+    </article>
+  </div>
+</section>
+</div>
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+<script src="data/productos.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

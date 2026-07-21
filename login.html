@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar sesión | PS Deals</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+<main class="login-shell">
+<section class="login-brand">
+  <div>
+    <span class="brand-badge">PS</span>
+    <p class="eyebrow">Sistema de gestión local</p>
+    <h1>Administra PS Deals con acceso controlado.</h1>
+    <p>Ventas, inventario, clientes, apartados y reportes protegidos por usuario y rol.</p>
+  </div>
+  <small>Los datos permanecen guardados en este equipo.</small>
+</section>
+
+<section class="login-panel">
+  <form id="formLogin" class="login-card">
+    <div class="login-logo"><span>PS</span></div>
+    <p class="eyebrow">Bienvenido</p>
+    <h2>Iniciar sesión</h2>
+    <p class="intro">Escribe tus credenciales para entrar al panel.</p>
+
+    <label class="form-label" for="usuario">Usuario</label>
+    <div class="input-wrap">
+      <i class="bi bi-person"></i>
+      <input id="usuario" class="form-control" autocomplete="username" required autofocus>
+    </div>
+
+    <label class="form-label mt-3" for="password">Contraseña</label>
+    <div class="input-wrap">
+      <i class="bi bi-lock"></i>
+      <input id="password" type="password" class="form-control" autocomplete="current-password" required>
+      <button id="verPassword" type="button" aria-label="Mostrar contraseña"><i class="bi bi-eye"></i></button>
+    </div>
+
+    <div id="mensaje" class="alert alert-danger d-none mt-3 mb-0"></div>
+
+    <button class="btn btn-dark w-100 mt-4" type="submit">
+      Entrar al sistema <i class="bi bi-arrow-right"></i>
+    </button>
+
+    <div class="default-access">
+      <strong>Primer acceso</strong>
+      <span>Usuario: <code>admin</code></span>
+      <span>Contraseña: <code>1234</code></span>
+      <small>Cámbiala desde Usuarios después de entrar.</small>
+    </div>
+  </form>
+</section>
+</main>
+<script src="js/auth.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+PSAuth.asegurarAdministrador();
+
+const existente = PSAuth.usuarioActual();
+if (existente) location.href = "dashboard.html";
+
+$("verPassword").addEventListener("click", () => {
+  const campo = $("password");
+  campo.type = campo.type === "password" ? "text" : "password";
+  $("verPassword").innerHTML = campo.type === "password"
+    ? '<i class="bi bi-eye"></i>'
+    : '<i class="bi bi-eye-slash"></i>';
+});
+
+$("formLogin").addEventListener("submit", evento => {
+  evento.preventDefault();
+  const resultado = PSAuth.iniciarSesion($("usuario").value, $("password").value);
+
+  if (!resultado.ok) {
+    $("mensaje").textContent = resultado.mensaje;
+    $("mensaje").classList.remove("d-none");
+    return;
+  }
+
+  const destino = sessionStorage.getItem("psdeals_destino") || "dashboard.html";
+  sessionStorage.removeItem("psdeals_destino");
+  location.href = destino;
+});
+</script>
+</body>
+</html>
