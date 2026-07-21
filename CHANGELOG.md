@@ -18,3 +18,10 @@
 - Validación de referencias, IDs y sintaxis JavaScript.
 
 
+
+## v3.5.0 — Dashboard Inteligente
+- Comparativos diarios, semanales y mensuales.
+- Panel “¿Qué debería hacer hoy?” con prioridades accionables.
+- Semáforo de salud del negocio para flujo, rentabilidad, inventario y cobranza.
+- Recomendaciones automáticas sobre categorías, clientes e inventario detenido.
+- Detección de clientes inactivos, productos sin movimiento y riesgo de agotamiento.
