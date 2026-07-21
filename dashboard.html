@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/dashboard.css">
 <script src="js/auth.js"></script>
+<link rel="stylesheet" href="css/notificaciones-global.css">
 </head>
 <body>
 <div class="app-shell">
@@ -145,7 +146,7 @@
 
   <div class="col-xl-5">
     <article class="panel-card h-100">
-      <div class="panel-header"><div><span class="panel-kicker">Atención requerida</span><h3>Centro de alertas</h3></div><span id="alertasTotal" class="alert-counter">0</span></div>
+      <div class="panel-header"><div><span class="panel-kicker">Atención requerida</span><h3>Centro de alertas</h3></div><div class="d-flex align-items-center gap-2"><a href="notificaciones.html" class="panel-link">Ver todas</a><span id="alertasTotal" class="alert-counter">0</span></div></div>
       <div id="listaAlertas" class="alerts-list"></div>
     </article>
   </div>
@@ -178,5 +179,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
 <script src="data/productos.js"></script>
 <script src="js/dashboard.js"></script>
+<script src="js/notificaciones-engine.js"></script>
+<script src="js/notificaciones-global.js"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@
 
   const MODULOS = {
     "dashboard.html": "dashboard",
+    "notificaciones.html": "notificaciones",
     "ventas.html": "ventas",
     "apartados.html": "apartados",
     "devoluciones.html": "devoluciones",
@@ -23,16 +24,16 @@
 
   const ROLES = {
     Administrador: [
-      "dashboard","ventas","apartados","devoluciones","inventario","compras",
+      "dashboard","notificaciones","ventas","apartados","devoluciones","inventario","compras",
       "gastos","clientes","cobrar","reportes","configuracion","usuarios"
     ],
     Supervisor: [
-      "dashboard","ventas","apartados","devoluciones","inventario","compras",
+      "dashboard","notificaciones","ventas","apartados","devoluciones","inventario","compras",
       "gastos","clientes","cobrar","reportes"
     ],
-    Cajero: ["dashboard","ventas","apartados","devoluciones","clientes","cobrar"],
-    Vendedor: ["dashboard","ventas","apartados","clientes"],
-    Almacen: ["dashboard","inventario","compras"]
+    Cajero: ["dashboard","notificaciones","ventas","apartados","devoluciones","clientes","cobrar"],
+    Vendedor: ["dashboard","notificaciones","ventas","apartados","clientes"],
+    Almacen: ["dashboard","notificaciones","inventario","compras"]
   };
 
   function leer(clave, respaldo) {

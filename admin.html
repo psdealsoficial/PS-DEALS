@@ -24,6 +24,7 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/notificaciones-global.css">
 </head>
 
 <body>
@@ -35,12 +36,20 @@
                 <span class="text-primary">PS</span> Deals Admin
             </a>
 
-            <a href="index.html"
-               class="btn btn-outline-primary">
-
-                <i class="bi bi-shop"></i>
-                Ver tienda
-            </a>
+            <div class="d-flex gap-2">
+                <a href="dashboard.html" class="btn btn-outline-secondary">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    Dashboard
+                </a>
+                <a href="notificaciones.html" class="btn btn-outline-secondary">
+                    <i class="bi bi-bell-fill"></i>
+                    Notificaciones
+                </a>
+                <a href="index.html" class="btn btn-outline-primary">
+                    <i class="bi bi-shop"></i>
+                    Ver tienda
+                </a>
+            </div>
 
         </div>
     </nav>
@@ -957,6 +966,8 @@
     <script src="data/productos.js"></script>
     <script src="js/admin.js"></script>
 
+<script src="js/notificaciones-engine.js"></script>
+<script src="js/notificaciones-global.js"></script>
 </body>
 
 </html>

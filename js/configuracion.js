@@ -10,7 +10,9 @@ gastos:"psdeals_gastos",
 devoluciones:"psdeals_devoluciones",
 apartados:"psdeals_apartados",
 usuarios:"psdeals_usuarios",
-bitacora:"psdeals_bitacora"
+bitacora:"psdeals_bitacora",
+notificacionesConfig:"psdeals_notificaciones_config",
+notificacionesLeidas:"psdeals_notificaciones_leidas"
 };
 
 const $=id=>document.getElementById(id);
