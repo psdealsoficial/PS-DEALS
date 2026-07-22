@@ -407,3 +407,193 @@ $("sidebarBackdrop").addEventListener("click",cerrarSidebar);
 
 cargarFormulario();
 renderDiagnostico();
+// ===== PS Deals v3.8: importación y exportación avanzada =====
+let importacionCSVTemporal=null;
+
+function escaparCSV(valor){
+    if(valor===null || valor===undefined) return "";
+    const texto=typeof valor==="object" ? JSON.stringify(valor) : String(valor);
+    return /[",\n\r;]/.test(texto) ? `"${texto.replace(/"/g,'""')}"` : texto;
+}
+
+function descargarCSV(nombre, filas){
+    if(!Array.isArray(filas) || !filas.length){
+        mostrarMensaje("No hay registros para exportar.","warning");
+        return;
+    }
+    const columnas=[...new Set(filas.flatMap(f=>Object.keys(f||{})))];
+    const lineas=[columnas.map(escaparCSV).join(",")];
+    filas.forEach(fila=>lineas.push(columnas.map(c=>escaparCSV(fila?.[c])).join(",")));
+    const contenido="\uFEFF"+lineas.join("\r\n");
+    const blob=new Blob([contenido],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=nombre;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
+
+function datosExportacionCSV(tipo){
+    const mapa={
+        productos:()=>obtenerProductosSeguros(),
+        clientes:()=>leerJSON(CLAVES.clientes,[]),
+        ventas:()=>leerJSON(CLAVES.ventas,[]),
+        compras:()=>leerJSON(CLAVES.compras,[]),
+        gastos:()=>leerJSON(CLAVES.gastos,[]),
+        apartados:()=>leerJSON(CLAVES.apartados,[])
+    };
+    return (mapa[tipo]||(()=>[]))();
+}
+
+function detectarSeparador(texto){
+    const primera=(texto.split(/\r?\n/).find(l=>l.trim())||"");
+    const candidatos=[",",";","\t"];
+    return candidatos.sort((a,b)=>(primera.split(b).length-primera.split(a).length))[0];
+}
+
+function parsearCSV(texto){
+    const sep=detectarSeparador(texto);
+    const filas=[];
+    let fila=[],campo="",comillas=false;
+    for(let i=0;i<texto.length;i++){
+        const ch=texto[i],next=texto[i+1];
+        if(ch==='"' && comillas && next==='"'){campo+='"';i++;continue;}
+        if(ch==='"'){comillas=!comillas;continue;}
+        if(ch===sep && !comillas){fila.push(campo);campo="";continue;}
+        if((ch==='\n'||ch==='\r')&&!comillas){
+            if(ch==='\r'&&next==='\n') i++;
+            fila.push(campo);campo="";
+            if(fila.some(v=>String(v).trim()!=="")) filas.push(fila);
+            fila=[];continue;
+        }
+        campo+=ch;
+    }
+    if(campo.length||fila.length){fila.push(campo);if(fila.some(v=>String(v).trim()!=="")) filas.push(fila);}
+    if(filas.length<2) throw new Error("El CSV no contiene registros suficientes.");
+    const headers=filas[0].map((h,i)=>(h||`campo_${i+1}`).trim());
+    return filas.slice(1).map(valores=>Object.fromEntries(headers.map((h,i)=>[h,(valores[i]??"").trim()])));
+}
+
+function normalizarNumero(valor,def=0){
+    if(valor===null||valor===undefined||valor==="") return def;
+    const n=Number(String(valor).replace(/[$,%\s]/g,"").replace(",","."));
+    return Number.isFinite(n)?n:def;
+}
+
+function primerValor(obj,nombres){
+    const entries=Object.entries(obj);
+    for(const nombre of nombres){
+        const match=entries.find(([k])=>k.trim().toLowerCase()===nombre.toLowerCase());
+        if(match && String(match[1]).trim()!=="") return match[1];
+    }
+    return "";
+}
+
+function adaptarImportacion(tipo,filas){
+    if(tipo==="productos"){
+        return filas.map((r,i)=>({
+            id:primerValor(r,["id"]) || `IMP-${Date.now()}-${i+1}`,
+            nombre:primerValor(r,["nombre","producto","descripcion"]) || `Producto importado ${i+1}`,
+            categoria:primerValor(r,["categoria","categoría"]) || "Sin categoría",
+            descripcion:primerValor(r,["descripcion","descripción"]),
+            precio:normalizarNumero(primerValor(r,["precio","precio venta","venta"])),
+            antes:normalizarNumero(primerValor(r,["antes","precio anterior"])),
+            costo:normalizarNumero(primerValor(r,["costo","precio costo"])),
+            stock:Math.max(0,Math.trunc(normalizarNumero(primerValor(r,["stock","existencia","existencias"])))),
+            stockMinimo:Math.max(0,Math.trunc(normalizarNumero(primerValor(r,["stockMinimo","stock minimo","mínimo"]),3))),
+            sku:primerValor(r,["sku","codigo","código"]),
+            codigoBarras:primerValor(r,["codigoBarras","codigo barras","código de barras"]),
+            proveedor:primerValor(r,["proveedor"]),
+            imagen:primerValor(r,["imagen"]) || "img/Productos/sin-imagen.jpg",
+            disponible:String(primerValor(r,["disponible","activo"])||"true").toLowerCase()!=="false"
+        })).filter(x=>x.nombre);
+    }
+    return filas.map((r,i)=>({
+        id:primerValor(r,["id"]) || `CLI-${Date.now()}-${i+1}`,
+        nombre:primerValor(r,["nombre","cliente"]) || `Cliente importado ${i+1}`,
+        telefono:primerValor(r,["telefono","teléfono","celular","whatsapp"]),
+        correo:primerValor(r,["correo","email"]),
+        direccion:primerValor(r,["direccion","dirección","domicilio"]),
+        notas:primerValor(r,["notas","observaciones"]),
+        fechaRegistro:primerValor(r,["fechaRegistro","fecha registro","fecha"]) || new Date().toISOString()
+    })).filter(x=>x.nombre);
+}
+
+function claveIdentidad(tipo,item){
+    if(tipo==="productos") return String(item.sku||item.codigoBarras||item.id||item.nombre).trim().toLowerCase();
+    return String(item.telefono||item.correo||item.id||item.nombre).trim().toLowerCase();
+}
+
+function combinarRegistros(tipo,actuales,nuevos){
+    const mapa=new Map(actuales.map(x=>[claveIdentidad(tipo,x),x]));
+    nuevos.forEach(x=>{
+        const k=claveIdentidad(tipo,x);
+        mapa.set(k,mapa.has(k)?{...mapa.get(k),...x}:x);
+    });
+    return [...mapa.values()];
+}
+
+function mostrarVistaPreviaImportacion(tipo,modo,datos,nombreArchivo){
+    importacionCSVTemporal={tipo,modo,datos,nombreArchivo};
+    const preview=$("vistaPreviaImportacion");
+    const columnas=tipo==="productos"?["nombre","sku","categoria","precio","costo","stock"]:["nombre","telefono","correo","direccion"];
+    $("resumenImportacion").textContent=`${datos.length} registros detectados · ${tipo} · modo ${modo} · ${nombreArchivo}`;
+    $("encabezadoVistaPrevia").innerHTML=`<tr>${columnas.map(c=>`<th>${c}</th>`).join("")}</tr>`;
+    $("cuerpoVistaPrevia").innerHTML=datos.slice(0,20).map(r=>`<tr>${columnas.map(c=>`<td title="${String(r[c]??"").replace(/"/g,"&quot;")}">${String(r[c]??"")}</td>`).join("")}</tr>`).join("");
+    preview.classList.remove("d-none");
+    preview.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function cancelarImportacionCSV(){
+    importacionCSVTemporal=null;
+    $("archivoCSV").value="";
+    $("vistaPreviaImportacion").classList.add("d-none");
+}
+
+$("btnExportarCSV")?.addEventListener("click",()=>{
+    const tipo=$("tipoExportacionCSV").value;
+    const filas=datosExportacionCSV(tipo);
+    descargarCSV(`ps-deals-${tipo}-${marcaTiempo()}.csv`,filas);
+    mostrarMensaje(`${filas.length} registros de ${tipo} exportados en CSV.`,"success");
+});
+
+$("archivoCSV")?.addEventListener("change",evento=>{
+    const archivo=evento.target.files?.[0];
+    if(!archivo) return;
+    const tipo=$("tipoImportacionCSV").value;
+    const modo=$("modoImportacionCSV").value;
+    const lector=new FileReader();
+    lector.onload=e=>{
+        try{
+            const filas=parsearCSV(String(e.target.result||""));
+            const adaptadas=adaptarImportacion(tipo,filas);
+            if(!adaptadas.length) throw new Error("No se detectaron registros válidos.");
+            mostrarVistaPreviaImportacion(tipo,modo,adaptadas,archivo.name);
+        }catch(err){
+            cancelarImportacionCSV();
+            mostrarMensaje(err.message||"No fue posible procesar el CSV.","danger");
+        }
+    };
+    lector.onerror=()=>mostrarMensaje("No fue posible leer el archivo CSV.","danger");
+    lector.readAsText(archivo,"utf-8");
+});
+
+$("btnCancelarImportacion")?.addEventListener("click",cancelarImportacionCSV);
+
+$("btnAplicarImportacion")?.addEventListener("click",()=>{
+    if(!importacionCSVTemporal) return;
+    const {tipo,modo,datos}=importacionCSVTemporal;
+    const clave=tipo==="productos"?CLAVES.productos:CLAVES.clientes;
+    const actuales=tipo==="productos"?obtenerProductosSeguros():leerJSON(clave,[]);
+    const finales=modo==="reemplazar"?datos:combinarRegistros(tipo,actuales,datos);
+    if(!confirm(`Se guardarán ${finales.length} registros de ${tipo}. ¿Continuar?`)) return;
+    if(tipo==="productos"&&typeof guardarProductos==="function") guardarProductos(finales);
+    else guardarJSON(clave,finales);
+    if(window.PSToast) window.PSToast(`${datos.length} registros importados correctamente.`,"success");
+    mostrarMensaje(`${datos.length} registros importados. Total actual: ${finales.length}.`,"success");
+    cancelarImportacionCSV();
+    renderDiagnostico();
+});

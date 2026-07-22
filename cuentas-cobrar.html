@@ -1,557 +1,350 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Cuentas por cobrar | PS Deals</title>
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="css/cuentas-cobrar.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cuentas por cobrar | PS Deals</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="css/cuentas-cobrar.css" rel="stylesheet"/>
 <script src="js/auth.js"></script>
-<link rel="stylesheet" href="css/notificaciones-global.css">
-<link rel="stylesheet" href="css/productividad-global.css">
-</head>
-
-<body>
-
+<link href="css/notificaciones-global.css" rel="stylesheet"/>
+<link href="css/productividad-global.css" rel="stylesheet"/>
+<link href="css/components.css" rel="stylesheet"/></head>
+<body class="ps-app">
 <div class="app-shell">
-
-    <div id="psSidebarMount" data-component="sidebar"></div>
+<div data-component="sidebar" id="psSidebarMount"></div>
 <script src="js/component-loader.js"></script>
 <script>window.PSComponents.loadSidebar();</script>
-
-    <main class="main-content">
-
-        <header class="topbar">
-
-            <div class="d-flex align-items-center gap-3">
-
-                <button
-                    type="button"
-                    id="btnAbrirSidebar"
-                    class="btn-menu"
-                    aria-label="Abrir menú">
-
-                    <i class="bi bi-list"></i>
-                </button>
-
-                <div>
-                    <span class="topbar-subtitle">Crédito y cobranza</span>
-                    <h1 class="topbar-title">Cuentas por cobrar</h1>
-                </div>
-
-            </div>
-
-            <button
-                type="button"
-                id="btnNuevaCuenta"
-                class="btn btn-primary">
-
-                <i class="bi bi-plus-lg"></i>
+<main class="main-content ps-module-content">
+<header class="topbar">
+<div class="d-flex align-items-center gap-3">
+<button aria-label="Abrir menú" class="btn-menu ps-shell-menu" id="btnAbrirSidebar" type="button">
+<i class="bi bi-list"></i>
+</button>
+<div>
+<span class="topbar-subtitle">Crédito y cobranza</span>
+<h1 class="topbar-title">Cuentas por cobrar</h1>
+</div>
+</div>
+<button class="btn btn-primary" id="btnNuevaCuenta" type="button">
+<i class="bi bi-plus-lg"></i>
                 Nueva cuenta
             </button>
-
-        </header>
-
-        <div class="content-wrapper">
-
-            <section class="hero-cobranza">
-
-                <div>
-                    <span class="hero-badge">
-                        <i class="bi bi-wallet-fill"></i>
+</header>
+<div class="content-wrapper">
+<section class="hero-cobranza">
+<div>
+<span class="hero-badge">
+<i class="bi bi-wallet-fill"></i>
                         Control de crédito
                     </span>
-
-                    <h2>Registra créditos, abonos y saldos pendientes</h2>
-
-                    <p>
+<h2>Registra créditos, abonos y saldos pendientes</h2>
+<p>
                         Consulta quién debe, cuánto ha abonado y qué cuentas
                         están próximas a vencer.
                     </p>
-                </div>
-
-                <div class="hero-resumen">
-                    <span>Saldo pendiente total</span>
-                    <strong id="heroSaldoPendiente">$0</strong>
-                </div>
-
-            </section>
-
-            <section class="row g-4 mt-1">
-
-                <div class="col-sm-6 col-xl-3">
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <i class="bi bi-cash-stack"></i>
-                        </div>
-
-                        <span>Total financiado</span>
-                        <strong id="statTotalFinanciado">$0</strong>
-                        <small>Importe original</small>
-                    </article>
-                </div>
-
-                <div class="col-sm-6 col-xl-3">
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <i class="bi bi-hourglass-split"></i>
-                        </div>
-
-                        <span>Saldo pendiente</span>
-                        <strong id="statSaldoPendiente">$0</strong>
-                        <small id="statCuentasAbiertas">0 cuentas abiertas</small>
-                    </article>
-                </div>
-
-                <div class="col-sm-6 col-xl-3">
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <i class="bi bi-check-circle-fill"></i>
-                        </div>
-
-                        <span>Total recuperado</span>
-                        <strong id="statTotalRecuperado">$0</strong>
-                        <small>Abonos registrados</small>
-                    </article>
-                </div>
-
-                <div class="col-sm-6 col-xl-3">
-                    <article class="metric-card">
-                        <div class="metric-icon danger">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                        </div>
-
-                        <span>Cuentas vencidas</span>
-                        <strong id="statVencidas">0</strong>
-                        <small id="statMontoVencido">$0 vencido</small>
-                    </article>
-                </div>
-
-            </section>
-
-            <section class="panel-card mt-4">
-
-                <div class="panel-toolbar">
-
-                    <div>
-                        <span class="panel-kicker">Cobranza</span>
-                        <h3>Créditos registrados</h3>
-                    </div>
-
-                    <div class="toolbar-filters">
-
-                        <div class="input-group search-group">
-                            <span class="input-group-text">
-                                <i class="bi bi-search"></i>
-                            </span>
-
-                            <input
-                                type="search"
-                                id="buscadorCuentas"
-                                class="form-control"
-                                placeholder="Buscar cliente, folio o concepto">
-                        </div>
-
-                        <select id="filtroEstado" class="form-select">
-                            <option value="todas">Todas</option>
-                            <option value="pendientes">Pendientes</option>
-                            <option value="vencidas">Vencidas</option>
-                            <option value="pagadas">Pagadas</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table cuentas-table align-middle">
-                        <thead>
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Concepto</th>
-                                <th>Fecha</th>
-                                <th>Vencimiento</th>
-                                <th>Importe</th>
-                                <th>Abonado</th>
-                                <th>Saldo</th>
-                                <th>Estado</th>
-                                <th class="text-end">Acciones</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="tablaCuentas"></tbody>
-                    </table>
-                </div>
-
-            </section>
-
-        </div>
-
-    </main>
-
 </div>
-
-<div class="modal fade" id="modalCuenta" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-
-            <div class="modal-header">
-                <div>
-                    <span class="modal-kicker">Crédito</span>
-                    <h5 id="tituloModalCuenta" class="modal-title fw-bold">
+<div class="hero-resumen">
+<span>Saldo pendiente total</span>
+<strong id="heroSaldoPendiente">$0</strong>
+</div>
+</section>
+<section class="row g-4 mt-1">
+<div class="col-sm-6 col-xl-3">
+<article class="metric-card">
+<div class="metric-icon">
+<i class="bi bi-cash-stack"></i>
+</div>
+<span>Total financiado</span>
+<strong id="statTotalFinanciado">$0</strong>
+<small>Importe original</small>
+</article>
+</div>
+<div class="col-sm-6 col-xl-3">
+<article class="metric-card">
+<div class="metric-icon">
+<i class="bi bi-hourglass-split"></i>
+</div>
+<span>Saldo pendiente</span>
+<strong id="statSaldoPendiente">$0</strong>
+<small id="statCuentasAbiertas">0 cuentas abiertas</small>
+</article>
+</div>
+<div class="col-sm-6 col-xl-3">
+<article class="metric-card">
+<div class="metric-icon">
+<i class="bi bi-check-circle-fill"></i>
+</div>
+<span>Total recuperado</span>
+<strong id="statTotalRecuperado">$0</strong>
+<small>Abonos registrados</small>
+</article>
+</div>
+<div class="col-sm-6 col-xl-3">
+<article class="metric-card">
+<div class="metric-icon danger">
+<i class="bi bi-exclamation-triangle-fill"></i>
+</div>
+<span>Cuentas vencidas</span>
+<strong id="statVencidas">0</strong>
+<small id="statMontoVencido">$0 vencido</small>
+</article>
+</div>
+</section>
+<section class="panel-card mt-4">
+<div class="panel-toolbar">
+<div>
+<span class="panel-kicker">Cobranza</span>
+<h3>Créditos registrados</h3>
+</div>
+<div class="toolbar-filters">
+<div class="input-group search-group">
+<span class="input-group-text">
+<i class="bi bi-search"></i>
+</span>
+<input class="form-control" id="buscadorCuentas" placeholder="Buscar cliente, folio o concepto" type="search"/>
+</div>
+<select class="form-select" id="filtroEstado">
+<option value="todas">Todas</option>
+<option value="pendientes">Pendientes</option>
+<option value="vencidas">Vencidas</option>
+<option value="pagadas">Pagadas</option>
+</select>
+</div>
+</div>
+<div class="table-responsive">
+<table class="table cuentas-table align-middle">
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Concepto</th>
+<th>Fecha</th>
+<th>Vencimiento</th>
+<th>Importe</th>
+<th>Abonado</th>
+<th>Saldo</th>
+<th>Estado</th>
+<th class="text-end">Acciones</th>
+</tr>
+</thead>
+<tbody id="tablaCuentas"></tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+<div aria-hidden="true" class="modal fade" id="modalCuenta" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content border-0">
+<div class="modal-header">
+<div>
+<span class="modal-kicker">Crédito</span>
+<h5 class="modal-title fw-bold" id="tituloModalCuenta">
                         Nueva cuenta por cobrar
                     </h5>
-                </div>
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Cerrar"></button>
-            </div>
-
-            <form id="formCuenta">
-
-                <div class="modal-body">
-
-                    <input type="hidden" id="cuentaId">
-
-                    <div class="row g-3">
-
-                        <div class="col-12">
-                            <label for="cuentaCliente" class="form-label">
+</div>
+<button aria-label="Cerrar" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<form id="formCuenta">
+<div class="modal-body">
+<input id="cuentaId" type="hidden"/>
+<div class="row g-3">
+<div class="col-12">
+<label class="form-label" for="cuentaCliente">
                                 Cliente
                             </label>
-
-                            <input
-                                type="text"
-                                id="cuentaCliente"
-                                class="form-control"
-                                list="listaClientes"
-                                required
-                                placeholder="Nombre del cliente">
-
-                            <datalist id="listaClientes"></datalist>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="cuentaConcepto" class="form-label">
+<input class="form-control" id="cuentaCliente" list="listaClientes" placeholder="Nombre del cliente" required="" type="text"/>
+<datalist id="listaClientes"></datalist>
+</div>
+<div class="col-12">
+<label class="form-label" for="cuentaConcepto">
                                 Concepto
                             </label>
-
-                            <input
-                                type="text"
-                                id="cuentaConcepto"
-                                class="form-control"
-                                required
-                                maxlength="140"
-                                placeholder="Ej. Venta de JBL Flip 6">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="cuentaMonto" class="form-label">
+<input class="form-control" id="cuentaConcepto" maxlength="140" placeholder="Ej. Venta de JBL Flip 6" required="" type="text"/>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="cuentaMonto">
                                 Monto del crédito
                             </label>
-
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-
-                                <input
-                                    type="number"
-                                    id="cuentaMonto"
-                                    class="form-control"
-                                    min="0.01"
-                                    step="0.01"
-                                    required>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="cuentaAbonoInicial" class="form-label">
+<div class="input-group">
+<span class="input-group-text">$</span>
+<input class="form-control" id="cuentaMonto" min="0.01" required="" step="0.01" type="number"/>
+</div>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="cuentaAbonoInicial">
                                 Abono inicial
                             </label>
-
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-
-                                <input
-                                    type="number"
-                                    id="cuentaAbonoInicial"
-                                    class="form-control"
-                                    min="0"
-                                    step="0.01"
-                                    value="0">
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="cuentaFecha" class="form-label">
+<div class="input-group">
+<span class="input-group-text">$</span>
+<input class="form-control" id="cuentaAbonoInicial" min="0" step="0.01" type="number" value="0"/>
+</div>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="cuentaFecha">
                                 Fecha
                             </label>
-
-                            <input
-                                type="date"
-                                id="cuentaFecha"
-                                class="form-control"
-                                required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="cuentaVencimiento" class="form-label">
+<input class="form-control" id="cuentaFecha" required="" type="date"/>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="cuentaVencimiento">
                                 Vencimiento
                             </label>
-
-                            <input
-                                type="date"
-                                id="cuentaVencimiento"
-                                class="form-control"
-                                required>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="cuentaNotas" class="form-label">
+<input class="form-control" id="cuentaVencimiento" required="" type="date"/>
+</div>
+<div class="col-12">
+<label class="form-label" for="cuentaNotas">
                                 Notas
                             </label>
-
-                            <textarea
-                                id="cuentaNotas"
-                                class="form-control"
-                                rows="3"
-                                maxlength="400"
-                                placeholder="Acuerdos, forma de pago o comentarios"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div id="mensajeCuenta" class="alert d-none mt-3 mb-0"></div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
+<textarea class="form-control" id="cuentaNotas" maxlength="400" placeholder="Acuerdos, forma de pago o comentarios" rows="3"></textarea>
+</div>
+</div>
+<div class="alert d-none mt-3 mb-0" id="mensajeCuenta"></div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">
 
                         Cancelar
                     </button>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-floppy-fill"></i>
+<button class="btn btn-primary" type="submit">
+<i class="bi bi-floppy-fill"></i>
                         Guardar cuenta
                     </button>
-                </div>
-
-            </form>
-
-        </div>
-    </div>
 </div>
-
-<div class="modal fade" id="modalAbono" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-
-            <div class="modal-header">
-                <div>
-                    <span class="modal-kicker">Cobranza</span>
-                    <h5 class="modal-title fw-bold">Registrar abono</h5>
-                </div>
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Cerrar"></button>
-            </div>
-
-            <form id="formAbono">
-
-                <div class="modal-body">
-
-                    <input type="hidden" id="abonoCuentaId">
-
-                    <div id="abonoResumenCuenta" class="abono-resumen mb-4"></div>
-
-                    <div class="row g-3">
-
-                        <div class="col-md-6">
-                            <label for="abonoMonto" class="form-label">
+</form>
+</div>
+</div>
+</div>
+<div aria-hidden="true" class="modal fade" id="modalAbono" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content border-0">
+<div class="modal-header">
+<div>
+<span class="modal-kicker">Cobranza</span>
+<h5 class="modal-title fw-bold">Registrar abono</h5>
+</div>
+<button aria-label="Cerrar" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<form id="formAbono">
+<div class="modal-body">
+<input id="abonoCuentaId" type="hidden"/>
+<div class="abono-resumen mb-4" id="abonoResumenCuenta"></div>
+<div class="row g-3">
+<div class="col-md-6">
+<label class="form-label" for="abonoMonto">
                                 Monto del abono
                             </label>
-
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-
-                                <input
-                                    type="number"
-                                    id="abonoMonto"
-                                    class="form-control"
-                                    min="0.01"
-                                    step="0.01"
-                                    required>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="abonoFecha" class="form-label">
+<div class="input-group">
+<span class="input-group-text">$</span>
+<input class="form-control" id="abonoMonto" min="0.01" required="" step="0.01" type="number"/>
+</div>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="abonoFecha">
                                 Fecha
                             </label>
-
-                            <input
-                                type="date"
-                                id="abonoFecha"
-                                class="form-control"
-                                required>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="abonoMetodo" class="form-label">
+<input class="form-control" id="abonoFecha" required="" type="date"/>
+</div>
+<div class="col-12">
+<label class="form-label" for="abonoMetodo">
                                 Método de pago
                             </label>
-
-                            <select id="abonoMetodo" class="form-select">
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Transferencia">Transferencia</option>
-                                <option value="Tarjeta">Tarjeta</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="abonoNotas" class="form-label">
+<select class="form-select" id="abonoMetodo">
+<option value="Efectivo">Efectivo</option>
+<option value="Transferencia">Transferencia</option>
+<option value="Tarjeta">Tarjeta</option>
+<option value="Otro">Otro</option>
+</select>
+</div>
+<div class="col-12">
+<label class="form-label" for="abonoNotas">
                                 Notas
                             </label>
-
-                            <textarea
-                                id="abonoNotas"
-                                class="form-control"
-                                rows="2"
-                                maxlength="300"
-                                placeholder="Opcional"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div id="mensajeAbono" class="alert d-none mt-3 mb-0"></div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
+<textarea class="form-control" id="abonoNotas" maxlength="300" placeholder="Opcional" rows="2"></textarea>
+</div>
+</div>
+<div class="alert d-none mt-3 mb-0" id="mensajeAbono"></div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">
 
                         Cancelar
                     </button>
-
-                    <button type="submit" class="btn btn-success">
-                        <i class="bi bi-cash-coin"></i>
+<button class="btn btn-success" type="submit">
+<i class="bi bi-cash-coin"></i>
                         Registrar abono
                     </button>
-                </div>
-
-            </form>
-
-        </div>
-    </div>
 </div>
-
-<div class="modal fade" id="modalDetalleCuenta" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0">
-
-            <div class="modal-header">
-                <div>
-                    <span class="modal-kicker">Estado de cuenta</span>
-                    <h5 id="detalleCuentaTitulo" class="modal-title fw-bold">
+</form>
+</div>
+</div>
+</div>
+<div aria-hidden="true" class="modal fade" id="modalDetalleCuenta" tabindex="-1">
+<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+<div class="modal-content border-0">
+<div class="modal-header">
+<div>
+<span class="modal-kicker">Estado de cuenta</span>
+<h5 class="modal-title fw-bold" id="detalleCuentaTitulo">
                         Cuenta
                     </h5>
-                </div>
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Cerrar"></button>
-            </div>
-
-            <div class="modal-body">
-
-                <div class="row g-3 mb-4">
-
-                    <div class="col-md-4">
-                        <div class="detail-stat">
-                            <span>Importe original</span>
-                            <strong id="detalleMonto">$0</strong>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="detail-stat">
-                            <span>Total abonado</span>
-                            <strong id="detalleAbonado">$0</strong>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="detail-stat">
-                            <span>Saldo pendiente</span>
-                            <strong id="detalleSaldo">$0</strong>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div id="detalleCuentaInfo" class="detail-info mb-4"></div>
-
-                <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
-                    <div>
-                        <span class="panel-kicker">Movimientos</span>
-                        <h5 class="fw-bold mb-0">Historial de abonos</h5>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table detalle-table align-middle">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Método</th>
-                                <th>Notas</th>
-                                <th class="text-end">Monto</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="tablaAbonos"></tbody>
-                    </table>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
 </div>
-
+<button aria-label="Cerrar" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<div class="row g-3 mb-4">
+<div class="col-md-4">
+<div class="detail-stat">
+<span>Importe original</span>
+<strong id="detalleMonto">$0</strong>
+</div>
+</div>
+<div class="col-md-4">
+<div class="detail-stat">
+<span>Total abonado</span>
+<strong id="detalleAbonado">$0</strong>
+</div>
+</div>
+<div class="col-md-4">
+<div class="detail-stat">
+<span>Saldo pendiente</span>
+<strong id="detalleSaldo">$0</strong>
+</div>
+</div>
+</div>
+<div class="detail-info mb-4" id="detalleCuentaInfo"></div>
+<div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+<div>
+<span class="panel-kicker">Movimientos</span>
+<h5 class="fw-bold mb-0">Historial de abonos</h5>
+</div>
+</div>
+<div class="table-responsive">
+<table class="table detalle-table align-middle">
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Método</th>
+<th>Notas</th>
+<th class="text-end">Monto</th>
+</tr>
+</thead>
+<tbody id="tablaAbonos"></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/cuentas-cobrar.js"></script>
-
 <script src="js/notificaciones-engine.js"></script>
 <script src="js/notificaciones-global.js"></script>
 <script src="js/productividad-global.js"></script>
+<script src="js/performance-monitor.js"></script>
 </body>
 </html>

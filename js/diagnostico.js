@@ -7,6 +7,13 @@
     ["Reportes", "reportes.html"], ["Actividad", "actividad.html"], ["Notificaciones", "notificaciones.html"],
     ["Configuración", "configuracion.html"]
   ];
+  const paginasArquitectura = [
+    ["Dashboard","dashboard.html"],["Notificaciones","notificaciones.html"],["Actividad","actividad.html"],
+    ["Ventas","ventas.html"],["Apartados","apartados.html"],["Devoluciones","devoluciones.html"],
+    ["Inventario","admin.html"],["Compras","compras.html"],["Gastos","gastos.html"],["Clientes","clientes.html"],
+    ["Cuentas por cobrar","cuentas-cobrar.html"],["Reportes","reportes.html"],["Configuración","configuracion.html"],
+    ["Diagnóstico","diagnostico.html"],["Usuarios","usuarios.html"]
+  ];
   const $ = id => document.getElementById(id);
   let resultados = [];
   let lineasLog = [];
@@ -27,6 +34,18 @@
   async function existe(url) {
     try { const r = await fetch(`${url}?diag=${Date.now()}`, { cache: "no-store" }); return r.ok; } catch { return false; }
   }
+  async function analizarArquitectura(nombre, archivo) {
+    try {
+      const r = await fetch(`${archivo}?diag=${Date.now()}`, { cache: "no-store" });
+      if (!r.ok) return { nombre, archivo, ok: false, motivo: "No disponible" };
+      const html = await r.text();
+      const mounts = (html.match(/id=["']psSidebarMount["']/g) || []).length;
+      const loaders = (html.match(/js\/component-loader\.js/g) || []).length;
+      const legacy = /<aside[^>]+id=["']sidebar["']/.test(html) && mounts === 0;
+      return { nombre, archivo, ok: mounts === 1 && loaders === 1 && !legacy, mounts, loaders, legacy,
+        motivo: mounts !== 1 ? `Montajes: ${mounts}` : loaders !== 1 ? `Cargadores: ${loaders}` : legacy ? "Sidebar antiguo" : "Modular" };
+    } catch { return { nombre, archivo, ok: false, motivo: "Error de lectura" }; }
+  }
   async function ejecutar() {
     resultados = []; lineasLog = []; $("btnEjecutar").disabled = true; $("btnEjecutar").innerHTML = '<i class="bi bi-hourglass-split"></i> Revisando…';
     const inicio = performance.now(); log(`Iniciando diagnóstico PS Deals v${info.version}`);
@@ -41,8 +60,23 @@
     let storageOk = false;
     try { const k = "psdeals_test_diagnostico"; localStorage.setItem(k, "ok"); storageOk = localStorage.getItem(k) === "ok"; localStorage.removeItem(k); } catch {}
     agregar("Almacenamiento local", storageOk ? "ok" : "bad", storageOk ? `${localStorage.length} claves disponibles actualmente.` : "El navegador bloqueó localStorage.", "bi-database-check");
-    agregar("Buscador y productividad", window.PSProductividad || document.querySelector('script[src="js/productividad-global.js"]') ? "ok" : "warn", "El paquete global de productividad está enlazado en esta página.", "bi-command");
-    agregar("Versión del sistema", info.version === "3.6.1" ? "ok" : "warn", `Versión detectada: ${info.version}; build ${info.build}.`, "bi-tag");
+    const perf = window.PSPerformance?.report?.();
+    if (perf) {
+      const carga = perf.navigation.load;
+      agregar("Rendimiento de carga", carga > 0 && carga <= 2500 ? "ok" : carga <= 5000 ? "warn" : "bad", carga ? `Carga completa aproximada: ${carga} ms.` : "El navegador no expuso métricas de navegación.", "bi-speedometer2");
+      agregar("Uso de almacenamiento", perf.storage.percentEstimate < 70 ? "ok" : perf.storage.percentEstimate < 90 ? "warn" : "bad", `${perf.storage.kb} KB en ${perf.storage.keys} claves; uso estimado ${perf.storage.percentEstimate}% del límite local.`, "bi-device-ssd");
+      agregar("Integridad de datos", perf.integrity.malformed.length === 0 ? "ok" : "bad", perf.integrity.malformed.length === 0 ? `${perf.integrity.available} colecciones válidas; no se detectó JSON dañado.` : `Colecciones dañadas: ${perf.integrity.malformed.map(x => x.key).join(", ")}.`, "bi-shield-check");
+    } else {
+      agregar("Monitor de rendimiento", "bad", "No se encontró js/performance-monitor.js.", "bi-speedometer2");
+    }
+    const productividad = window.PSProductividad;
+    agregar("Centro de comandos", productividad?.tieneCentroComandos?.() ? "ok" : "bad", productividad?.tieneCentroComandos?.() ? "Ctrl + K y el panel global están disponibles." : "No se encontró el Centro de comandos.", "bi-command");
+    const favoritos = productividad?.favoritos?.() || [];
+    const favKey = productividad?.claveFavoritos?.() || "no disponible";
+    agregar("Favoritos por usuario", productividad?.renderFavoritosSidebar && Array.isArray(favoritos) ? "ok" : "bad", productividad ? `${favoritos.length} favorito(s) guardado(s) en ${favKey}.` : "El servicio de favoritos no está disponible.", "bi-star-fill");
+    agregar("Ayuda contextual", productividad?.tieneAyuda?.() ? "ok" : "bad", productividad?.tieneAyuda?.() ? "El botón de ayuda contextual está visible." : "No se encontró el botón de ayuda.", "bi-question-circle");
+    agregar("Atajos de teclado", document.documentElement.dataset.psUx === "3.9.1" ? "ok" : "warn", document.documentElement.dataset.psUx ? `UX activa: v${document.documentElement.dataset.psUx}.` : "No se confirmó la inicialización de UX.", "bi-keyboard");
+    agregar("Versión del sistema", info.version === "3.9.1" ? "ok" : "warn", `Versión detectada: ${info.version}; build ${info.build}.`, "bi-tag");
     let componentesOk = await existe("components/sidebar.html");
     agregar("Archivo del componente", componentesOk ? "ok" : "bad", componentesOk ? "components/sidebar.html responde correctamente." : "No fue posible leer components/sidebar.html.", "bi-file-earmark-code");
     const estadosModulos = [];
@@ -50,6 +84,15 @@
     const fallos = estadosModulos.filter(x => !x.ok);
     agregar("Páginas principales", fallos.length ? "bad" : "ok", fallos.length ? `No respondieron: ${fallos.map(x => x.archivo).join(", ")}` : `${estadosModulos.length} módulos respondieron correctamente.`, "bi-window-stack");
     $("modulosGrid").innerHTML = estadosModulos.map(x => `<div class="module-item"><span>${x.nombre}</span><span class="status ${x.ok ? "ok" : "bad"}">${x.ok ? "Disponible" : "Error"}</span></div>`).join("");
+    const arquitectura = [];
+    for (const [nombre, archivo] of paginasArquitectura) arquitectura.push(await analizarArquitectura(nombre, archivo));
+    const modulares = arquitectura.filter(x => x.ok).length;
+    const cobertura = Math.round((modulares / arquitectura.length) * 100);
+    const duplicadosRuntime = window.PSComponents?.detectarDuplicados?.() || { sidebars: 0, mounts: 0, activeLinks: 0 };
+    agregar("Cobertura modular", cobertura === 100 ? "ok" : "warn", `${modulares} de ${arquitectura.length} páginas usan el componente central (${cobertura}%).`, "bi-diagram-3");
+    agregar("Menús duplicados", duplicadosRuntime.sidebars === 1 && duplicadosRuntime.mounts === 1 ? "ok" : "bad", `Página actual: ${duplicadosRuntime.sidebars} sidebar(s), ${duplicadosRuntime.mounts} montaje(s).`, "bi-copy");
+    agregar("Enlace activo", duplicadosRuntime.activeLinks === 1 ? "ok" : "warn", `Se detectaron ${duplicadosRuntime.activeLinks} opciones activas en el menú actual.`, "bi-cursor-fill");
+    $("modulosGrid").innerHTML = arquitectura.map(x => `<div class="module-item"><span>${x.nombre}</span><span class="status ${x.ok ? "ok" : "bad"}">${x.ok ? "Modular" : x.motivo}</span></div>`).join("") + `<div class="module-item module-coverage"><strong>Cobertura total</strong><span class="status ${cobertura === 100 ? "ok" : "warn"}">${cobertura}%</span></div>`;
     const ms = Math.round(performance.now() - inicio); $("tiempoPrueba").textContent = `${ms} ms`; log(`Diagnóstico terminado en ${ms} ms.`);
     $("btnEjecutar").disabled = false; $("btnEjecutar").innerHTML = '<i class="bi bi-arrow-repeat"></i> Ejecutar de nuevo';
   }

@@ -1,412 +1,265 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Clientes | PS Deals</title>
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="css/clientes.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clientes | PS Deals</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="css/clientes.css" rel="stylesheet"/>
 <script src="js/auth.js"></script>
-<link rel="stylesheet" href="css/notificaciones-global.css">
-<link rel="stylesheet" href="css/productividad-global.css">
-</head>
-
-<body>
-
+<link href="css/notificaciones-global.css" rel="stylesheet"/>
+<link href="css/productividad-global.css" rel="stylesheet"/>
+<link href="css/components.css" rel="stylesheet"/></head>
+<body class="ps-app">
 <div class="app-shell">
-
-    <div id="psSidebarMount" data-component="sidebar"></div>
+<div data-component="sidebar" id="psSidebarMount"></div>
 <script src="js/component-loader.js"></script>
 <script>window.PSComponents.loadSidebar();</script>
-
-    <main class="main-content">
-
-        <header class="topbar">
-
-            <div class="d-flex align-items-center gap-3">
-
-                <button
-                    type="button"
-                    id="btnAbrirSidebar"
-                    class="btn-menu"
-                    aria-label="Abrir menú">
-
-                    <i class="bi bi-list"></i>
-                </button>
-
-                <div>
-                    <span class="topbar-subtitle">Directorio comercial</span>
-                    <h1 class="topbar-title">Clientes</h1>
-                </div>
-
-            </div>
-
-            <button
-                type="button"
-                id="btnNuevoCliente"
-                class="btn btn-primary">
-
-                <i class="bi bi-person-plus-fill"></i>
+<main class="main-content ps-module-content">
+<header class="topbar">
+<div class="d-flex align-items-center gap-3">
+<button aria-label="Abrir menú" class="btn-menu ps-shell-menu" id="btnAbrirSidebar" type="button">
+<i class="bi bi-list"></i>
+</button>
+<div>
+<span class="topbar-subtitle">Directorio comercial</span>
+<h1 class="topbar-title">Clientes</h1>
+</div>
+</div>
+<button class="btn btn-primary" id="btnNuevoCliente" type="button">
+<i class="bi bi-person-plus-fill"></i>
                 Nuevo cliente
             </button>
-
-        </header>
-
-        <div class="content-wrapper">
-
-            <section class="hero-clientes">
-
-                <div>
-                    <span class="hero-badge">
-                        <i class="bi bi-person-hearts"></i>
+</header>
+<div class="content-wrapper">
+<section class="hero-clientes">
+<div>
+<span class="hero-badge">
+<i class="bi bi-person-hearts"></i>
                         Relación con clientes
                     </span>
-
-                    <h2>Conoce quién compra y cuánto ha gastado</h2>
-
-                    <p>
+<h2>Conoce quién compra y cuánto ha gastado</h2>
+<p>
                         El historial se relaciona automáticamente con las ventas
                         registradas por nombre y teléfono.
                     </p>
-                </div>
-
-                <button
-                    type="button"
-                    id="btnSincronizar"
-                    class="btn btn-light">
-
-                    <i class="bi bi-arrow-repeat"></i>
+</div>
+<button class="btn btn-light" id="btnSincronizar" type="button">
+<i class="bi bi-arrow-repeat"></i>
                     Sincronizar ventas
                 </button>
-
-            </section>
-
-            <section class="row g-4 mt-1">
-
-                <div class="col-sm-6 col-xl-3">
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <i class="bi bi-people-fill"></i>
-                        </div>
-
-                        <span>Clientes registrados</span>
-                        <strong id="statClientes">0</strong>
-                        <small>Directorio total</small>
-                    </article>
-                </div>
-
-                <div class="col-sm-6 col-xl-3">
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <i class="bi bi-person-check-fill"></i>
-                        </div>
-
-                        <span>Clientes con compras</span>
-                        <strong id="statConCompras">0</strong>
-                        <small>Con historial de ventas</small>
-                    </article>
-                </div>
-
-                <div class="col-sm-6 col-xl-3">
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <i class="bi bi-cash-coin"></i>
-                        </div>
-
-                        <span>Valor de clientes</span>
-                        <strong id="statValorClientes">$0</strong>
-                        <small>Ventas asociadas</small>
-                    </article>
-                </div>
-
-                <div class="col-sm-6 col-xl-3">
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <i class="bi bi-trophy-fill"></i>
-                        </div>
-
-                        <span>Mejor cliente</span>
-                        <strong id="statMejorCliente" class="metric-name">Sin datos</strong>
-                        <small id="statMejorClienteTotal">$0 gastados</small>
-                    </article>
-                </div>
-
-            </section>
-
-            <section class="panel-card mt-4">
-
-                <div class="panel-toolbar">
-
-                    <div>
-                        <span class="panel-kicker">Directorio</span>
-                        <h3>Lista de clientes</h3>
-                    </div>
-
-                    <div class="toolbar-filters">
-
-                        <div class="input-group search-group">
-                            <span class="input-group-text">
-                                <i class="bi bi-search"></i>
-                            </span>
-
-                            <input
-                                type="search"
-                                id="buscadorClientes"
-                                class="form-control"
-                                placeholder="Buscar por nombre, teléfono o correo">
-                        </div>
-
-                        <select id="filtroClientes" class="form-select">
-                            <option value="todos">Todos</option>
-                            <option value="con-compras">Con compras</option>
-                            <option value="sin-compras">Sin compras</option>
-                            <option value="frecuentes">Frecuentes</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table clientes-table align-middle">
-                        <thead>
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Contacto</th>
-                                <th>Compras</th>
-                                <th>Última compra</th>
-                                <th>Total gastado</th>
-                                <th class="text-end">Acciones</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="tablaClientes"></tbody>
-                    </table>
-                </div>
-
-            </section>
-
-        </div>
-
-    </main>
-
+</section>
+<section class="row g-4 mt-1">
+<div class="col-sm-6 col-xl-3">
+<article class="metric-card">
+<div class="metric-icon">
+<i class="bi bi-people-fill"></i>
 </div>
-
-<div class="modal fade" id="modalCliente" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-
-            <div class="modal-header">
-                <div>
-                    <span class="modal-kicker">Directorio</span>
-                    <h5 id="tituloModalCliente" class="modal-title fw-bold">
+<span>Clientes registrados</span>
+<strong id="statClientes">0</strong>
+<small>Directorio total</small>
+</article>
+</div>
+<div class="col-sm-6 col-xl-3">
+<article class="metric-card">
+<div class="metric-icon">
+<i class="bi bi-person-check-fill"></i>
+</div>
+<span>Clientes con compras</span>
+<strong id="statConCompras">0</strong>
+<small>Con historial de ventas</small>
+</article>
+</div>
+<div class="col-sm-6 col-xl-3">
+<article class="metric-card">
+<div class="metric-icon">
+<i class="bi bi-cash-coin"></i>
+</div>
+<span>Valor de clientes</span>
+<strong id="statValorClientes">$0</strong>
+<small>Ventas asociadas</small>
+</article>
+</div>
+<div class="col-sm-6 col-xl-3">
+<article class="metric-card">
+<div class="metric-icon">
+<i class="bi bi-trophy-fill"></i>
+</div>
+<span>Mejor cliente</span>
+<strong class="metric-name" id="statMejorCliente">Sin datos</strong>
+<small id="statMejorClienteTotal">$0 gastados</small>
+</article>
+</div>
+</section>
+<section class="panel-card mt-4">
+<div class="panel-toolbar">
+<div>
+<span class="panel-kicker">Directorio</span>
+<h3>Lista de clientes</h3>
+</div>
+<div class="toolbar-filters">
+<div class="input-group search-group">
+<span class="input-group-text">
+<i class="bi bi-search"></i>
+</span>
+<input class="form-control" id="buscadorClientes" placeholder="Buscar por nombre, teléfono o correo" type="search"/>
+</div>
+<select class="form-select" id="filtroClientes">
+<option value="todos">Todos</option>
+<option value="con-compras">Con compras</option>
+<option value="sin-compras">Sin compras</option>
+<option value="frecuentes">Frecuentes</option>
+</select>
+</div>
+</div>
+<div class="table-responsive">
+<table class="table clientes-table align-middle">
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Contacto</th>
+<th>Compras</th>
+<th>Última compra</th>
+<th>Total gastado</th>
+<th class="text-end">Acciones</th>
+</tr>
+</thead>
+<tbody id="tablaClientes"></tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</div>
+<div aria-hidden="true" class="modal fade" id="modalCliente" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content border-0">
+<div class="modal-header">
+<div>
+<span class="modal-kicker">Directorio</span>
+<h5 class="modal-title fw-bold" id="tituloModalCliente">
                         Nuevo cliente
                     </h5>
-                </div>
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Cerrar"></button>
-            </div>
-
-            <form id="formCliente">
-
-                <div class="modal-body">
-
-                    <input type="hidden" id="clienteId">
-
-                    <div class="row g-3">
-
-                        <div class="col-12">
-                            <label for="clienteNombre" class="form-label">
+</div>
+<button aria-label="Cerrar" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<form id="formCliente">
+<div class="modal-body">
+<input id="clienteId" type="hidden"/>
+<div class="row g-3">
+<div class="col-12">
+<label class="form-label" for="clienteNombre">
                                 Nombre completo
                             </label>
-
-                            <input
-                                type="text"
-                                id="clienteNombre"
-                                class="form-control"
-                                required
-                                maxlength="100"
-                                placeholder="Ej. María López">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="clienteTelefono" class="form-label">
+<input class="form-control" id="clienteNombre" maxlength="100" placeholder="Ej. María López" required="" type="text"/>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="clienteTelefono">
                                 Teléfono
                             </label>
-
-                            <input
-                                type="tel"
-                                id="clienteTelefono"
-                                class="form-control"
-                                maxlength="20"
-                                placeholder="492 000 0000">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="clienteCorreo" class="form-label">
+<input class="form-control" id="clienteTelefono" maxlength="20" placeholder="492 000 0000" type="tel"/>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="clienteCorreo">
                                 Correo
                             </label>
-
-                            <input
-                                type="email"
-                                id="clienteCorreo"
-                                class="form-control"
-                                maxlength="120"
-                                placeholder="cliente@correo.com">
-                        </div>
-
-                        <div class="col-12">
-                            <label for="clienteDireccion" class="form-label">
+<input class="form-control" id="clienteCorreo" maxlength="120" placeholder="cliente@correo.com" type="email"/>
+</div>
+<div class="col-12">
+<label class="form-label" for="clienteDireccion">
                                 Dirección
                             </label>
-
-                            <input
-                                type="text"
-                                id="clienteDireccion"
-                                class="form-control"
-                                maxlength="160"
-                                placeholder="Opcional">
-                        </div>
-
-                        <div class="col-12">
-                            <label for="clienteNotas" class="form-label">
+<input class="form-control" id="clienteDireccion" maxlength="160" placeholder="Opcional" type="text"/>
+</div>
+<div class="col-12">
+<label class="form-label" for="clienteNotas">
                                 Notas
                             </label>
-
-                            <textarea
-                                id="clienteNotas"
-                                class="form-control"
-                                rows="3"
-                                maxlength="400"
-                                placeholder="Preferencias, referencias o información útil"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div id="mensajeCliente" class="alert d-none mt-3 mb-0"></div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
+<textarea class="form-control" id="clienteNotas" maxlength="400" placeholder="Preferencias, referencias o información útil" rows="3"></textarea>
+</div>
+</div>
+<div class="alert d-none mt-3 mb-0" id="mensajeCliente"></div>
+</div>
+<div class="modal-footer">
+<button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">
 
                         Cancelar
                     </button>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-floppy-fill"></i>
+<button class="btn btn-primary" type="submit">
+<i class="bi bi-floppy-fill"></i>
                         Guardar cliente
                     </button>
-                </div>
-
-            </form>
-
-        </div>
-    </div>
 </div>
-
-<div class="modal fade" id="modalDetalleCliente" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0">
-
-            <div class="modal-header">
-                <div>
-                    <span class="modal-kicker">Perfil comercial</span>
-                    <h5 id="detalleClienteNombre" class="modal-title fw-bold">
+</form>
+</div>
+</div>
+</div>
+<div aria-hidden="true" class="modal fade" id="modalDetalleCliente" tabindex="-1">
+<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+<div class="modal-content border-0">
+<div class="modal-header">
+<div>
+<span class="modal-kicker">Perfil comercial</span>
+<h5 class="modal-title fw-bold" id="detalleClienteNombre">
                         Cliente
                     </h5>
-                </div>
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Cerrar"></button>
-            </div>
-
-            <div class="modal-body">
-
-                <div class="row g-4 mb-4">
-
-                    <div class="col-md-4">
-                        <div class="detail-stat">
-                            <span>Total gastado</span>
-                            <strong id="detalleTotalGastado">$0</strong>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="detail-stat">
-                            <span>Compras realizadas</span>
-                            <strong id="detalleCompras">0</strong>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="detail-stat">
-                            <span>Ticket promedio</span>
-                            <strong id="detalleTicketPromedio">$0</strong>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div id="detalleContacto" class="contact-card mb-4"></div>
-
-                <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
-                    <div>
-                        <span class="panel-kicker">Historial</span>
-                        <h5 class="fw-bold mb-0">Compras del cliente</h5>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table detalle-table align-middle">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Folio</th>
-                                <th>Productos</th>
-                                <th>Pago</th>
-                                <th class="text-end">Total</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="tablaComprasCliente"></tbody>
-                    </table>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
 </div>
-
+<button aria-label="Cerrar" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+</div>
+<div class="modal-body">
+<div class="row g-4 mb-4">
+<div class="col-md-4">
+<div class="detail-stat">
+<span>Total gastado</span>
+<strong id="detalleTotalGastado">$0</strong>
+</div>
+</div>
+<div class="col-md-4">
+<div class="detail-stat">
+<span>Compras realizadas</span>
+<strong id="detalleCompras">0</strong>
+</div>
+</div>
+<div class="col-md-4">
+<div class="detail-stat">
+<span>Ticket promedio</span>
+<strong id="detalleTicketPromedio">$0</strong>
+</div>
+</div>
+</div>
+<div class="contact-card mb-4" id="detalleContacto"></div>
+<div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+<div>
+<span class="panel-kicker">Historial</span>
+<h5 class="fw-bold mb-0">Compras del cliente</h5>
+</div>
+</div>
+<div class="table-responsive">
+<table class="table detalle-table align-middle">
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Folio</th>
+<th>Productos</th>
+<th>Pago</th>
+<th class="text-end">Total</th>
+</tr>
+</thead>
+<tbody id="tablaComprasCliente"></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/clientes.js"></script>
-
 <script src="js/notificaciones-engine.js"></script>
 <script src="js/notificaciones-global.js"></script>
 <script src="js/productividad-global.js"></script>
+<script src="js/performance-monitor.js"></script>
 </body>
 </html>

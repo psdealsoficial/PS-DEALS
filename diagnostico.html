@@ -1,28 +1,31 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Diagnóstico del sistema | PS Deals</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/diagnostico.css"><link rel="stylesheet" href="css/productividad-global.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="css/diagnostico.css" rel="stylesheet"/><link href="css/productividad-global.css" rel="stylesheet"/>
 <script src="js/system-info.js"></script><script src="js/auth.js"></script>
-</head>
-<body><div class="app-shell">
-<div id="psSidebarMount" data-component="sidebar"></div><script src="js/component-loader.js"></script><script>window.PSComponents.loadSidebar();</script>
-<main class="main-content">
-<header class="topbar"><div class="d-flex align-items-center gap-3"><button id="btnAbrirSidebar" class="btn-menu"><i class="bi bi-list"></i></button><div><span class="topbar-subtitle">Verificación interna</span><h1>Diagnóstico del sistema</h1></div></div><div class="actions"><button id="btnCopiar" class="btn-diag btn-light-diag"><i class="bi bi-clipboard"></i> Copiar reporte</button><button id="btnEjecutar" class="btn-diag btn-primary-diag"><i class="bi bi-play-fill"></i> Ejecutar pruebas</button></div></header>
+<link href="css/components.css" rel="stylesheet"/></head>
+<body class="ps-app"><div class="app-shell">
+<div data-component="sidebar" id="psSidebarMount"></div><script src="js/component-loader.js"></script><script>window.PSComponents.loadSidebar();</script>
+<main class="main-content ps-module-content">
+<header class="topbar"><div class="d-flex align-items-center gap-3"><button class="btn-menu ps-shell-menu" id="btnAbrirSidebar"><i class="bi bi-list"></i></button><div><span class="topbar-subtitle">Verificación interna</span><h1>Diagnóstico del sistema</h1></div></div><div class="actions"><button class="btn-diag btn-light-diag" id="btnCopiar"><i class="bi bi-clipboard"></i> Copiar reporte</button><button class="btn-diag btn-primary-diag" id="btnEjecutar"><i class="bi bi-play-fill"></i> Ejecutar pruebas</button></div></header>
 <div class="content-wrapper">
-<section class="diag-hero"><div><span><i class="bi bi-tools"></i> Developer Center</span><h2>Comprueba que cada actualización esté funcionando</h2><p>Esta pantalla revisa componentes, permisos, almacenamiento, archivos principales y entorno de ejecución.</p></div><div class="version-pill"><span>Versión instalada</span><strong id="versionSistema">—</strong><small id="buildSistema">—</small></div></section>
+<section class="diag-hero"><div><span><i class="bi bi-tools"></i> Developer Center</span><h2>Comprueba que cada actualización esté funcionando</h2><p>Esta pantalla revisa componentes, cobertura modular, menús duplicados, permisos, almacenamiento y archivos principales.</p></div><div class="version-pill"><span>Versión instalada</span><strong id="versionSistema">—</strong><small id="buildSistema">—</small></div></section>
 <section class="summary-grid"><article><i class="bi bi-check-circle-fill text-success"></i><div><small>Pruebas correctas</small><strong id="totalOk">0</strong></div></article><article><i class="bi bi-exclamation-triangle-fill text-warning"></i><div><small>Advertencias</small><strong id="totalWarn">0</strong></div></article><article><i class="bi bi-x-octagon-fill text-danger"></i><div><small>Errores</small><strong id="totalBad">0</strong></div></article><article><i class="bi bi-stopwatch-fill text-primary"></i><div><small>Tiempo de prueba</small><strong id="tiempoPrueba">0 ms</strong></div></article></section>
 <div class="diag-layout"><div>
-<section class="diag-card"><div class="card-head"><div><h3>Pruebas automáticas</h3><p>Resultados de la ejecución actual.</p></div><span id="estadoGeneral" class="status pending">Sin ejecutar</span></div><div class="progress mb-3"><div id="progreso" class="progress-bar" style="width:0%"></div></div><div id="listaPruebas" class="test-list"></div><div id="recomendacion" class="hint">Pulsa “Ejecutar pruebas” para revisar la instalación.</div></section>
-<section class="diag-card"><div class="card-head"><div><h3>Módulos principales</h3><p>Comprueba que las páginas respondan desde Live Server.</p></div></div><div id="modulosGrid" class="module-grid"></div></section>
+<section class="diag-card"><div class="card-head"><div><h3>Pruebas automáticas</h3><p>Resultados de la ejecución actual.</p></div><span class="status pending" id="estadoGeneral">Sin ejecutar</span></div><div class="progress mb-3"><div class="progress-bar" id="progreso" style="width:0%"></div></div><div class="test-list" id="listaPruebas"></div><div class="hint" id="recomendacion">Pulsa “Ejecutar pruebas” para revisar la instalación.</div></section>
+<section class="diag-card"><div class="card-head"><div><h3>Cobertura de arquitectura modular</h3><p>Cada página debe mostrar el estado “Modular”.</p></div></div><div class="module-grid" id="modulosGrid"></div></section>
 </div><aside>
-<section class="diag-card"><div class="card-head"><div><h3>Información técnica</h3><p>Entorno detectado.</p></div></div><div id="metaSistema" class="meta-list"></div></section>
-<section class="diag-card"><div class="card-head"><div><h3>Últimas mejoras</h3><p>Resumen de versiones recientes.</p></div></div><ul class="history-list"><li><strong>v3.6.1</strong><span>Developer Center y pruebas visibles.</span></li><li><strong>v3.6</strong><span>Sidebar centralizado en components/sidebar.html.</span></li><li><strong>v3.5.1</strong><span>Buscador, atajos, toasts y protecciones.</span></li><li><strong>v3.5</strong><span>Dashboard inteligente.</span></li></ul></section>
-<section class="diag-card"><div class="card-head"><div><h3>Registro técnico</h3><p>Detalle de esta revisión.</p></div></div><div id="logTecnico" class="log-box">Esperando ejecución…</div></section>
+<section class="diag-card"><div class="card-head"><div><h3>Información técnica</h3><p>Entorno detectado.</p></div></div><div class="meta-list" id="metaSistema"></div></section>
+<section class="diag-card"><div class="card-head"><div><h3>Últimas mejoras</h3><p>Resumen de versiones recientes.</p></div></div><ul class="history-list"><li><strong>v3.7</strong><span>Rendimiento, uso de almacenamiento e integridad de datos.</span></li><li><strong>v3.6.3</strong><span>Interfaz estable y menú fijo entre módulos.</span></li><li><strong>v3.6.2</strong><span>Ventas, Inventario y Gastos integrados; cobertura modular visible.</span></li><li><strong>v3.6.1</strong><span>Developer Center y pruebas visibles.</span></li><li><strong>v3.6</strong><span>Sidebar centralizado en components/sidebar.html.</span></li><li><strong>v3.5.1</strong><span>Buscador, atajos, toasts y protecciones.</span></li><li><strong>v3.5</strong><span>Dashboard inteligente.</span></li></ul></section>
+<section class="diag-card"><div class="card-head"><div><h3>Registro técnico</h3><p>Detalle de esta revisión.</p></div></div><div class="log-box" id="logTecnico">Esperando ejecución…</div></section>
 </aside></div></div></main></div>
-<script src="js/diagnostico.js"></script><script src="js/productividad-global.js"></script>
+<script src="js/productividad-global.js"></script>
+<script src="js/performance-monitor.js"></script>
+<script src="js/diagnostico.js"></script>
 </body></html>

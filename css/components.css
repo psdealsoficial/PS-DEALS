@@ -1,0 +1,84 @@
+:root{
+  --ps-sidebar-width:272px;
+  --ps-sidebar-bg:#111827;
+  --ps-shell-bg:#f4f7fb;
+}
+
+/* Cascarón visual único de PS Deals v3.6.3 */
+html{scrollbar-gutter:stable}
+body.ps-app{margin:0;min-height:100vh;overflow-x:hidden;background:var(--ps-shell-bg)}
+body.ps-app #psSidebarMount{position:relative;z-index:1040}
+
+body.ps-app #psSidebarMount .sidebar{
+  position:fixed!important;
+  top:0!important;
+  bottom:0!important;
+  left:0!important;
+  z-index:1040!important;
+  display:flex!important;
+  width:var(--ps-sidebar-width)!important;
+  min-width:var(--ps-sidebar-width)!important;
+  max-width:var(--ps-sidebar-width)!important;
+  height:100dvh!important;
+  flex-direction:column!important;
+  padding:24px 18px!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  background:var(--ps-sidebar-bg)!important;
+  color:#fff!important;
+  box-shadow:none!important;
+  transform:none;
+  transition:transform .25s ease!important;
+}
+body.ps-app #psSidebarMount .sidebar-brand{display:flex!important;align-items:center!important;justify-content:space-between!important;flex:0 0 auto!important;margin:0 0 22px!important;padding:0!important}
+body.ps-app #psSidebarMount .sidebar-brand>a{display:flex!important;align-items:center!important;gap:12px!important;color:#fff!important;text-decoration:none!important}
+body.ps-app #psSidebarMount .brand-mark{display:grid!important;width:46px!important;height:46px!important;min-width:46px!important;place-items:center!important;border-radius:15px!important;background:linear-gradient(135deg,#60a5fa,#2563eb)!important;color:#fff!important;font-size:16px!important;font-weight:700!important}
+body.ps-app #psSidebarMount .sidebar-brand strong,
+body.ps-app #psSidebarMount .sidebar-brand small,
+body.ps-app #psSidebarMount .sidebar-footer strong,
+body.ps-app #psSidebarMount .sidebar-footer small{display:block!important}
+body.ps-app #psSidebarMount .sidebar-brand strong{font-size:15px!important;line-height:1.25!important}
+body.ps-app #psSidebarMount .sidebar-brand small,
+body.ps-app #psSidebarMount .sidebar-footer small{color:#94a3b8!important;font-size:10px!important;line-height:1.35!important}
+body.ps-app #psSidebarMount .btn-cerrar-sidebar{display:none;border:0;background:transparent;color:#fff;font-size:20px}
+body.ps-app #psSidebarMount .sidebar-nav{display:flex!important;min-height:0!important;flex:1 1 auto!important;flex-direction:column!important;gap:0!important;margin:0!important;padding:0 3px 8px 0!important;overflow-x:hidden!important;overflow-y:auto!important;scrollbar-width:thin;scrollbar-color:#334155 transparent}
+body.ps-app #psSidebarMount .sidebar-nav::-webkit-scrollbar{width:6px}
+body.ps-app #psSidebarMount .sidebar-nav::-webkit-scrollbar-thumb{border-radius:99px;background:#334155}
+body.ps-app #psSidebarMount .sidebar-label{display:block!important;margin:0 13px 9px!important;color:#64748b!important;font-size:9px!important;font-weight:700!important;letter-spacing:1px!important;text-transform:uppercase!important}
+body.ps-app #psSidebarMount .sidebar-nav .nav-link{display:flex!important;min-height:40px!important;align-items:center!important;gap:12px!important;margin:0 0 4px!important;padding:10px 13px!important;border:0!important;border-radius:12px!important;background:transparent!important;color:#cbd5e1!important;font-family:Poppins,sans-serif!important;font-size:12px!important;font-weight:400!important;line-height:20px!important;text-decoration:none!important;box-shadow:none!important;transform:none!important}
+body.ps-app #psSidebarMount .sidebar-nav .nav-link i{width:22px!important;min-width:22px!important;font-size:16px!important;text-align:center!important}
+body.ps-app #psSidebarMount .sidebar-nav .nav-link:hover,
+body.ps-app #psSidebarMount .sidebar-nav .nav-link.active{background:rgba(37,99,235,.18)!important;color:#fff!important}
+body.ps-app #psSidebarMount .sidebar-nav .nav-link.active{box-shadow:inset 3px 0 0 #60a5fa!important}
+body.ps-app #psSidebarMount .sidebar-footer{display:flex!important;flex:0 0 auto!important;align-items:center!important;gap:10px!important;margin:14px 0 0!important;padding:14px!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:14px!important;background:rgba(255,255,255,.04)!important}
+body.ps-app #psSidebarMount .status-dot{width:9px!important;height:9px!important;min-width:9px!important;border-radius:50%!important;background:#22c55e!important}
+body.ps-app #psSidebarMount .sidebar-backdrop{display:none}
+
+/* El contenido empieza siempre exactamente después del menú. */
+body.ps-app main.ps-module-content{
+  box-sizing:border-box!important;
+  width:auto!important;
+  max-width:none;
+  min-height:100vh!important;
+  margin-left:var(--ps-sidebar-width)!important;
+  transform:none!important;
+  transition:none!important;
+}
+/* Bootstrap .container en Inventario conservaba ancho y centrado; se mantiene el padding pero no el margen automático. */
+body.ps-app main.ps-module-content.container{margin-right:0!important;padding-right:max(24px,calc((100vw - var(--ps-sidebar-width) - 1140px)/2))!important;padding-left:max(24px,calc((100vw - var(--ps-sidebar-width) - 1140px)/2))!important}
+
+.ps-module-menu{position:fixed;top:14px;left:14px;z-index:1025;display:none;width:44px;height:44px;place-items:center;border:1px solid #e5e7eb;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.12);font-size:22px}
+.ps-component-error{margin:18px;padding:14px;border:1px solid #fecaca;border-radius:12px;background:#fef2f2;color:#991b1b}
+.ps-auth-hidden{display:none!important}
+
+@media(max-width:991px){
+  body.ps-app #psSidebarMount .sidebar{transform:translateX(-100%)!important}
+  body.ps-app #psSidebarMount .sidebar.open{transform:translateX(0)!important}
+  body.ps-app #psSidebarMount .btn-cerrar-sidebar{display:grid!important;place-items:center!important}
+  body.ps-app #psSidebarMount .sidebar-backdrop{position:fixed!important;inset:0!important;z-index:1030!important;background:rgba(15,23,42,.55)!important}
+  body.ps-app #psSidebarMount .sidebar-backdrop.show{display:block!important}
+  body.ps-app main.ps-module-content{width:100%!important;margin-left:0!important;padding-top:56px}
+  body.ps-app main.ps-module-content.container{margin-right:auto!important;margin-left:auto!important;padding-right:16px!important;padding-left:16px!important}
+  .ps-module-menu{display:grid}
+}

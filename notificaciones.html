@@ -1,118 +1,106 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Notificaciones | PS Deals</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/notificaciones.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="css/notificaciones.css" rel="stylesheet"/>
 <script src="js/auth.js"></script>
-<link rel="stylesheet" href="css/productividad-global.css">
-</head>
-<body>
+<link href="css/productividad-global.css" rel="stylesheet"/>
+<link href="css/components.css" rel="stylesheet"/></head>
+<body class="ps-app">
 <div class="app-shell">
-<div id="psSidebarMount" data-component="sidebar"></div>
+<div data-component="sidebar" id="psSidebarMount"></div>
 <script src="js/component-loader.js"></script>
 <script>window.PSComponents.loadSidebar();</script>
-
-<main class="main-content">
+<main class="main-content ps-module-content">
 <header class="topbar">
-  <div class="d-flex align-items-center gap-3">
-    <button id="btnAbrirSidebar" class="btn-menu"><i class="bi bi-list"></i></button>
-    <div><span class="topbar-subtitle">PS Deals v3.3</span><h1>Centro de notificaciones</h1></div>
-  </div>
-  <div class="topbar-actions">
-    <button id="btnActualizar" class="btn btn-outline-primary"><i class="bi bi-arrow-clockwise"></i> Actualizar</button>
-    <button id="btnMarcarTodas" class="btn btn-primary"><i class="bi bi-check2-all"></i> Marcar todas como leídas</button>
-  </div>
+<div class="d-flex align-items-center gap-3">
+<button class="btn-menu ps-shell-menu" id="btnAbrirSidebar"><i class="bi bi-list"></i></button>
+<div><span class="topbar-subtitle">PS Deals v3.3</span><h1>Centro de notificaciones</h1></div>
+</div>
+<div class="topbar-actions">
+<button class="btn btn-outline-primary" id="btnActualizar"><i class="bi bi-arrow-clockwise"></i> Actualizar</button>
+<button class="btn btn-primary" id="btnMarcarTodas"><i class="bi bi-check2-all"></i> Marcar todas como leídas</button>
+</div>
 </header>
-
 <div class="content-wrapper">
 <section class="notification-hero">
-  <div>
-    <span class="hero-badge"><i class="bi bi-bell-fill"></i> Alertas inteligentes</span>
-    <h2>Lo importante, antes de que se convierta en un problema</h2>
-    <p>PS Deals analiza inventario, ventas, cobranza, apartados, compras y flujo de caja.</p>
-  </div>
-  <div class="hero-counter">
-    <span>Pendientes</span>
-    <strong id="totalPendientes">0</strong>
-    <small id="resumenPendientes">Sin alertas críticas</small>
-  </div>
+<div>
+<span class="hero-badge"><i class="bi bi-bell-fill"></i> Alertas inteligentes</span>
+<h2>Lo importante, antes de que se convierta en un problema</h2>
+<p>PS Deals analiza inventario, ventas, cobranza, apartados, compras y flujo de caja.</p>
+</div>
+<div class="hero-counter">
+<span>Pendientes</span>
+<strong id="totalPendientes">0</strong>
+<small id="resumenPendientes">Sin alertas críticas</small>
+</div>
 </section>
-
 <section class="summary-grid">
-  <article class="summary-card danger"><span><i class="bi bi-exclamation-octagon-fill"></i></span><div><small>Críticas</small><strong id="totalCriticas">0</strong></div></article>
-  <article class="summary-card warning"><span><i class="bi bi-exclamation-triangle-fill"></i></span><div><small>Advertencias</small><strong id="totalAdvertencias">0</strong></div></article>
-  <article class="summary-card info"><span><i class="bi bi-info-circle-fill"></i></span><div><small>Informativas</small><strong id="totalInformativas">0</strong></div></article>
-  <article class="summary-card success"><span><i class="bi bi-graph-up-arrow"></i></span><div><small>Oportunidades</small><strong id="totalOportunidades">0</strong></div></article>
+<article class="summary-card danger"><span><i class="bi bi-exclamation-octagon-fill"></i></span><div><small>Críticas</small><strong id="totalCriticas">0</strong></div></article>
+<article class="summary-card warning"><span><i class="bi bi-exclamation-triangle-fill"></i></span><div><small>Advertencias</small><strong id="totalAdvertencias">0</strong></div></article>
+<article class="summary-card info"><span><i class="bi bi-info-circle-fill"></i></span><div><small>Informativas</small><strong id="totalInformativas">0</strong></div></article>
+<article class="summary-card success"><span><i class="bi bi-graph-up-arrow"></i></span><div><small>Oportunidades</small><strong id="totalOportunidades">0</strong></div></article>
 </section>
-
 <section class="toolbar-card">
-  <div class="search-box"><i class="bi bi-search"></i><input id="busquedaNotificacion" placeholder="Buscar notificación, cliente o producto"></div>
-  <div class="filter-group">
-    <button class="filter-btn active" data-filter="todas">Todas</button>
-    <button class="filter-btn" data-filter="no-leidas">No leídas</button>
-    <button class="filter-btn" data-filter="critica">Críticas</button>
-    <button class="filter-btn" data-filter="advertencia">Advertencias</button>
-    <button class="filter-btn" data-filter="oportunidad">Oportunidades</button>
-  </div>
+<div class="search-box"><i class="bi bi-search"></i><input id="busquedaNotificacion" placeholder="Buscar notificación, cliente o producto"/></div>
+<div class="filter-group">
+<button class="filter-btn active" data-filter="todas">Todas</button>
+<button class="filter-btn" data-filter="no-leidas">No leídas</button>
+<button class="filter-btn" data-filter="critica">Críticas</button>
+<button class="filter-btn" data-filter="advertencia">Advertencias</button>
+<button class="filter-btn" data-filter="oportunidad">Oportunidades</button>
+</div>
 </section>
-
 <section class="notification-layout">
-  <div class="notification-list-card">
-    <div class="section-header">
-      <div><span class="section-kicker">Bandeja</span><h3>Notificaciones del negocio</h3></div>
-      <span id="contadorLista" class="list-counter">0 resultados</span>
-    </div>
-    <div id="listaNotificaciones" class="notification-list"></div>
-  </div>
-
-  <aside class="settings-card">
-    <div class="section-header"><div><span class="section-kicker">Preferencias</span><h3>Reglas de alerta</h3></div></div>
-
-    <label class="setting-row">
-      <div><strong>Stock bajo</strong><small>Avisar cuando llegue al mínimo.</small></div>
-      <input id="cfgStock" type="checkbox" class="form-check-input" checked>
-    </label>
-
-    <label class="setting-row">
-      <div><strong>Cuentas vencidas</strong><small>Alertar al vencer una cuenta.</small></div>
-      <input id="cfgCobranza" type="checkbox" class="form-check-input" checked>
-    </label>
-
-    <label class="setting-row">
-      <div><strong>Apartados próximos</strong><small>Avisar hasta 7 días antes.</small></div>
-      <input id="cfgApartados" type="checkbox" class="form-check-input" checked>
-    </label>
-
-    <label class="setting-row">
-      <div><strong>Flujo negativo</strong><small>Comparar entradas contra salidas.</small></div>
-      <input id="cfgFlujo" type="checkbox" class="form-check-input" checked>
-    </label>
-
-    <label class="setting-row">
-      <div><strong>Mejoras en ventas</strong><small>Detectar crecimiento contra ayer.</small></div>
-      <input id="cfgVentas" type="checkbox" class="form-check-input" checked>
-    </label>
-
-    <div class="setting-field">
-      <label>Días sin vender para alertar</label>
-      <input id="cfgDiasSinVenta" type="number" min="3" max="180" value="30" class="form-control">
-    </div>
-
-    <button id="btnGuardarPreferencias" class="btn btn-dark w-100"><i class="bi bi-save2"></i> Guardar preferencias</button>
-  </aside>
+<div class="notification-list-card">
+<div class="section-header">
+<div><span class="section-kicker">Bandeja</span><h3>Notificaciones del negocio</h3></div>
+<span class="list-counter" id="contadorLista">0 resultados</span>
+</div>
+<div class="notification-list" id="listaNotificaciones"></div>
+</div>
+<aside class="settings-card">
+<div class="section-header"><div><span class="section-kicker">Preferencias</span><h3>Reglas de alerta</h3></div></div>
+<label class="setting-row">
+<div><strong>Stock bajo</strong><small>Avisar cuando llegue al mínimo.</small></div>
+<input checked="" class="form-check-input" id="cfgStock" type="checkbox"/>
+</label>
+<label class="setting-row">
+<div><strong>Cuentas vencidas</strong><small>Alertar al vencer una cuenta.</small></div>
+<input checked="" class="form-check-input" id="cfgCobranza" type="checkbox"/>
+</label>
+<label class="setting-row">
+<div><strong>Apartados próximos</strong><small>Avisar hasta 7 días antes.</small></div>
+<input checked="" class="form-check-input" id="cfgApartados" type="checkbox"/>
+</label>
+<label class="setting-row">
+<div><strong>Flujo negativo</strong><small>Comparar entradas contra salidas.</small></div>
+<input checked="" class="form-check-input" id="cfgFlujo" type="checkbox"/>
+</label>
+<label class="setting-row">
+<div><strong>Mejoras en ventas</strong><small>Detectar crecimiento contra ayer.</small></div>
+<input checked="" class="form-check-input" id="cfgVentas" type="checkbox"/>
+</label>
+<div class="setting-field">
+<label>Días sin vender para alertar</label>
+<input class="form-control" id="cfgDiasSinVenta" max="180" min="3" type="number" value="30"/>
+</div>
+<button class="btn btn-dark w-100" id="btnGuardarPreferencias"><i class="bi bi-save2"></i> Guardar preferencias</button>
+</aside>
 </section>
 </div>
 </main>
 </div>
-
 <script src="data/productos.js"></script>
 <script src="js/notificaciones-engine.js"></script>
 <script src="js/notificaciones.js"></script>
 <script src="js/productividad-global.js"></script>
+<script src="js/performance-monitor.js"></script>
 </body>
 </html>
