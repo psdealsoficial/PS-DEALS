@@ -76,7 +76,23 @@
     agregar("Favoritos por usuario", productividad?.renderFavoritosSidebar && Array.isArray(favoritos) ? "ok" : "bad", productividad ? `${favoritos.length} favorito(s) guardado(s) en ${favKey}.` : "El servicio de favoritos no está disponible.", "bi-star-fill");
     agregar("Ayuda contextual", productividad?.tieneAyuda?.() ? "ok" : "bad", productividad?.tieneAyuda?.() ? "El botón de ayuda contextual está visible." : "No se encontró el botón de ayuda.", "bi-question-circle");
     agregar("Atajos de teclado", document.documentElement.dataset.psUx === "3.9.1" ? "ok" : "warn", document.documentElement.dataset.psUx ? `UX activa: v${document.documentElement.dataset.psUx}.` : "No se confirmó la inicialización de UX.", "bi-keyboard");
-    agregar("Versión del sistema", info.version === "3.9.1" ? "ok" : "warn", `Versión detectada: ${info.version}; build ${info.build}.`, "bi-tag");
+    agregar("Versión del sistema", info.version === "4.1.2" ? "ok" : "warn", `Versión detectada: ${info.version}; build ${info.build}.`, "bi-tag");
+    if (window.PSApi?.health) {
+      try {
+        const health = await window.PSApi.health();
+        agregar("API local", health.ok ? "ok" : "bad", health.ok ? `API ${health.api} disponible en ${location.origin}.` : "La API respondió con error.", "bi-hdd-network");
+        agregar("Base de datos SQLite", health.database?.connected ? "ok" : "bad", health.database?.connected ? `SQLite ${health.database.sqliteVersion}; ${health.database.migrationCount} migración(es) aplicada(s).` : (health.database?.error || "SQLite no está conectado."), "bi-database-check");
+        agregar("Migraciones de base de datos", health.database?.migrationCount >= 1 ? "ok" : "warn", `${health.database?.migrationCount || 0} migración(es) registrada(s).`, "bi-arrow-up-circle");
+        try { const sync = await PSApi.syncStatus(); agregar("Sincronización SQLite", sync.counts ? "ok" : "warn", `${sync.counts.productos} productos y ${sync.counts.clientes} clientes en SQLite.`, "bi-arrow-repeat"); } catch (error) { agregar("Sincronización SQLite", "bad", error.message, "bi-arrow-repeat"); }
+        try { const system = await PSApi.systemStatus(); agregar("Motor de datos SQLite", system.dataSource?.productos === "sqlite" && system.dataSource?.clientes === "sqlite" ? "ok" : "warn", `Productos: ${system.dataSource?.productos}; clientes: ${system.dataSource?.clientes}; caché: ${system.dataSource?.fallback}.`, "bi-database-gear"); } catch(error) { agregar("Motor de datos SQLite", "bad", error.message, "bi-database-gear"); }
+        try { const apiTests = await PSApi.tests(); agregar("Pruebas automáticas API", apiTests.ok ? "ok" : "bad", `${apiTests.passed}/${apiTests.total} correctas en ${apiTests.durationMs} ms.`, "bi-clipboard2-check"); } catch(error) { agregar("Pruebas automáticas API", "bad", error.message, "bi-clipboard2-x"); }
+      } catch (error) {
+        agregar("API local", "bad", `No responde /api/health: ${error.message}. Ejecuta npm install y npm start.`, "bi-hdd-network");
+        agregar("Base de datos SQLite", "bad", "No se puede validar SQLite mientras la API esté desconectada.", "bi-database-x");
+      }
+    } else {
+      agregar("Cliente API", "bad", "No se encontró js/api-client.js.", "bi-plug");
+    }
     let componentesOk = await existe("components/sidebar.html");
     agregar("Archivo del componente", componentesOk ? "ok" : "bad", componentesOk ? "components/sidebar.html responde correctamente." : "No fue posible leer components/sidebar.html.", "bi-file-earmark-code");
     const estadosModulos = [];

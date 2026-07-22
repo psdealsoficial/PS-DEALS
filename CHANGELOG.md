@@ -1,3 +1,17 @@
+## v4.1.2 — Clientes completamente en SQLite
+
+- Alta, edición, búsqueda y baja lógica de clientes mediante API.
+- SQLite es la fuente principal del módulo Clientes.
+- Validación de teléfono/correo duplicados en servidor.
+- Auditoría de creación, actualización y eliminación.
+- Caché local conservada solo para compatibilidad y recuperación.
+- Pruebas API ampliadas.
+
+## v4.1.0 — Motor de datos SQLite
+- Catálogos leídos desde SQLite con caché local.
+- API de productos y clientes.
+- Panel técnico y pruebas automáticas.
+
 
 ## v3.9.1 — Estabilización UX
 - Favoritos persistentes por usuario y migración desde la clave anterior.
@@ -90,3 +104,28 @@
 - Vista previa antes de guardar.
 - Modos combinar y reemplazar.
 - Detección automática de separador y normalización de columnas.
+
+## v4.0.0 — Fundamentos de persistencia
+
+- Se agregó servidor local Node.js + Express.
+- Se incorporó SQLite con migraciones versionadas.
+- Se creó la primera migración del modelo de datos.
+- Se agregaron endpoints de salud y estadísticas.
+- Diagnóstico ahora valida API, conexión SQLite y migraciones.
+- Los módulos continúan en localStorage durante la transición controlada.
+
+
+## v4.0.1
+- Asistente visual de migración de productos y clientes.
+- Validación previa y conteo comparativo.
+- Respaldo JSON automático del origen.
+- API de vista previa, migración y estado.
+- Migración idempotente mediante UUID estable.
+- localStorage se conserva como fuente activa durante la transición.
+
+## [4.0.2] - 2026-07-21
+### Added
+- Sincronización dual automática de Productos y Clientes hacia SQLite.
+- Panel Servidor y SQLite.
+- Endpoints `/api/sync/push` y `/api/sync/status`.
+- Prueba de sincronización dual en Diagnóstico.

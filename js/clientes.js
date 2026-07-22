@@ -46,6 +46,7 @@ const modalDetalleCliente = new bootstrap.Modal(
 
 let clientes = obtenerClientes();
 let ventas = obtenerVentas();
+let guardandoCliente = false;
 
 function obtenerClientes() {
     try {
@@ -60,11 +61,22 @@ function obtenerClientes() {
     }
 }
 
-function guardarClientes() {
-    localStorage.setItem(
-        CLAVE_CLIENTES,
-        JSON.stringify(clientes)
-    );
+function guardarCacheClientes() {
+    localStorage.setItem(CLAVE_CLIENTES, JSON.stringify(clientes));
+}
+
+async function cargarClientesDesdeSQLite(termino = "") {
+    try {
+        const respuesta = await window.PSApi.clients(termino);
+        clientes = Array.isArray(respuesta.clientes) ? respuesta.clientes : [];
+        guardarCacheClientes();
+        document.documentElement.dataset.clientesSource = "sqlite";
+        renderizarTodo();
+    } catch (error) {
+        document.documentElement.dataset.clientesSource = "cache";
+        console.warn("Clientes: usando caché local por error de API:", error.message);
+        renderizarTodo();
+    }
 }
 
 function obtenerVentas() {
@@ -185,7 +197,8 @@ function sincronizarClientesDesdeVentas(mostrarAviso = false) {
         creados += 1;
     });
 
-    guardarClientes();
+    guardarCacheClientes();
+    if (window.PSApi) { window.PSApi.saveClients(clientes).catch(error => console.warn("No se pudo sincronizar clientes detectados:", error.message)); }
     renderizarTodo();
 
     if (mostrarAviso) {
@@ -466,80 +479,42 @@ btnNuevoCliente.addEventListener("click", () => {
     modalCliente.show();
 });
 
-formCliente.addEventListener("submit", evento => {
+formCliente.addEventListener("submit", async evento => {
     evento.preventDefault();
+    if (guardandoCliente) return;
 
     const nombre = clienteNombre.value.trim();
     const telefono = clienteTelefono.value.trim();
     const correo = clienteCorreo.value.trim();
-
-    if (!nombre) {
-        mostrarMensajeCliente(
-            "El nombre es obligatorio.",
-            "danger"
-        );
-        return;
-    }
+    if (!nombre) { mostrarMensajeCliente("El nombre es obligatorio.", "danger"); return; }
 
     const idActual = Number(clienteId.value || 0);
-
-    const duplicado = clientes.find(cliente => {
-        if (Number(cliente.id) === idActual) {
-            return false;
-        }
-
-        const mismoTelefono =
-            telefono &&
-            normalizarTelefono(cliente.telefono) ===
-            normalizarTelefono(telefono);
-
-        const mismoCorreo =
-            correo &&
-            normalizarTexto(cliente.correo) ===
-            normalizarTexto(correo);
-
-        return mismoTelefono || mismoCorreo;
-    });
-
-    if (duplicado) {
-        mostrarMensajeCliente(
-            "Ya existe un cliente con ese teléfono o correo.",
-            "warning"
-        );
-        return;
-    }
-
     const datos = {
-        nombre,
-        telefono,
-        correo,
+        nombre, telefono, correo,
         direccion: clienteDireccion.value.trim(),
-        notas: clienteNotas.value.trim(),
-        actualizadoEn: new Date().toISOString()
+        notas: clienteNotas.value.trim()
     };
 
-    if (idActual) {
-        const indice = clientes.findIndex(
-            cliente => Number(cliente.id) === idActual
-        );
-
-        if (indice >= 0) {
-            clientes[indice] = {
-                ...clientes[indice],
-                ...datos
-            };
-        }
-    } else {
-        clientes.push({
-            id: generarId(),
-            ...datos,
-            creadoEn: new Date().toISOString()
-        });
+    guardandoCliente = true;
+    const boton = formCliente.querySelector('button[type="submit"]');
+    if (boton) { boton.disabled = true; boton.dataset.texto = boton.innerHTML; boton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Guardando…'; }
+    try {
+        const respuesta = idActual
+            ? await window.PSApi.updateClient(idActual, datos)
+            : await window.PSApi.createClient(datos);
+        const guardado = respuesta.cliente;
+        const indice = clientes.findIndex(item => Number(item.id) === Number(guardado.id));
+        if (indice >= 0) clientes[indice] = guardado; else clientes.push(guardado);
+        guardarCacheClientes();
+        modalCliente.hide();
+        renderizarTodo();
+        window.PSUX?.toast?.(idActual ? "Cliente actualizado correctamente" : "Cliente creado correctamente", "success");
+    } catch (error) {
+        mostrarMensajeCliente(error.message || "No se pudo guardar el cliente.", "danger");
+    } finally {
+        guardandoCliente = false;
+        if (boton) { boton.disabled = false; boton.innerHTML = boton.dataset.texto || '<i class="bi bi-floppy-fill"></i> Guardar cliente'; }
     }
-
-    guardarClientes();
-    modalCliente.hide();
-    renderizarTodo();
 });
 
 function mostrarMensajeCliente(texto, tipo) {
@@ -570,32 +545,23 @@ function editarCliente(id) {
     modalCliente.show();
 }
 
-function eliminarCliente(id) {
-    const cliente = clientes.find(
-        item => Number(item.id) === Number(id)
-    );
-
-    if (!cliente) {
-        return;
-    }
-
+async function eliminarCliente(id) {
+    const cliente = clientes.find(item => Number(item.id) === Number(id));
+    if (!cliente) return;
     const resumen = obtenerResumenCliente(cliente);
-
     const mensaje = resumen.cantidadCompras > 0
-        ? `Este cliente tiene ${resumen.cantidadCompras} compra(s). ` +
-          `Sus ventas no se eliminarán. ¿Eliminarlo del directorio?`
+        ? `Este cliente tiene ${resumen.cantidadCompras} compra(s). Sus ventas no se eliminarán. ¿Eliminarlo del directorio?`
         : `¿Eliminar a "${cliente.nombre}" del directorio?`;
-
-    if (!confirm(mensaje)) {
-        return;
+    if (!confirm(mensaje)) return;
+    try {
+        await window.PSApi.deleteClient(id);
+        clientes = clientes.filter(item => Number(item.id) !== Number(id));
+        guardarCacheClientes();
+        renderizarTodo();
+        window.PSUX?.toast?.("Cliente eliminado correctamente", "success");
+    } catch (error) {
+        alert(error.message || "No se pudo eliminar el cliente.");
     }
-
-    clientes = clientes.filter(
-        item => Number(item.id) !== Number(id)
-    );
-
-    guardarClientes();
-    renderizarTodo();
 }
 
 function verCliente(id) {
@@ -702,7 +668,11 @@ function verCliente(id) {
     modalDetalleCliente.show();
 }
 
-buscadorClientes.addEventListener("input", renderizarClientes);
+let temporizadorBusqueda;
+buscadorClientes.addEventListener("input", () => {
+    clearTimeout(temporizadorBusqueda);
+    temporizadorBusqueda = setTimeout(() => cargarClientesDesdeSQLite(buscadorClientes.value.trim()), 250);
+});
 filtroClientes.addEventListener("change", renderizarClientes);
 
 btnSincronizar.addEventListener("click", () => {
@@ -729,4 +699,4 @@ document.querySelectorAll(".disabled-link").forEach(enlace => {
     });
 });
 
-sincronizarClientesDesdeVentas(false);
+cargarClientesDesdeSQLite();

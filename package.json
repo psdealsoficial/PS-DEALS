@@ -1,0 +1,21 @@
+{
+  "name": "ps-deals",
+  "version": "4.1.2",
+  "private": true,
+  "description": "PS Deals v4.1.2 - clientes completamente en SQLite",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js",
+    "db:init": "node server/init-db.js",
+    "check": "node --check server/server.js && node --check server/database.js && node --check server/migrate.js && node --check server/init-db.js",
+    "test:api": "node server/self-test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "express": "^4.21.2"
+  }
+}

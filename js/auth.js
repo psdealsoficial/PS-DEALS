@@ -21,13 +21,15 @@
     "reportes.html": "reportes",
     "configuracion.html": "configuracion",
     "diagnostico.html": "diagnostico",
+    "migracion.html": "migracion",
+    "servidor.html": "servidor",
     "usuarios.html": "usuarios"
   };
 
   const ROLES = {
     Administrador: [
       "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
-      "gastos","clientes","cobrar","reportes","configuracion","diagnostico","usuarios"
+      "gastos","clientes","cobrar","reportes","configuracion","diagnostico","migracion","servidor","usuarios"
     ],
     Supervisor: [
       "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
@@ -245,6 +247,21 @@
       if (usuario.rol === "Administrador") {
         if (!Array.isArray(usuario.permisos)) usuario.permisos = [];
         if (!usuario.permisos.includes("diagnostico")) { usuario.permisos.push("diagnostico"); cambio = true; }
+      }
+    });
+    if (cambio) guardar(K_USUARIOS, usuarios);
+    localStorage.setItem(clave, "ok");
+  }
+
+  function migrarPermisosV401() {
+    const clave = "psdeals_migracion_permisos_v401";
+    if (localStorage.getItem(clave) === "ok") return;
+    const usuarios = asegurarAdministrador();
+    let cambio = false;
+    usuarios.forEach(usuario => {
+      if (usuario.rol === "Administrador") {
+        if (!Array.isArray(usuario.permisos)) usuario.permisos = [];
+        if (!usuario.permisos.includes("migracion")) { usuario.permisos.push("migracion"); cambio = true; }
       }
     });
     if (cambio) guardar(K_USUARIOS, usuarios);

@@ -1,13 +1,13 @@
 (() => {
   "use strict";
 
-  const VERSION = "3.9.1";
+  const VERSION = "4.0.1";
   const subtitulos = {
     "dashboard.html":"Panel ejecutivo","notificaciones.html":"Centro de alertas","actividad.html":"Bitácora inteligente",
     "ventas.html":"Punto de venta","apartados.html":"Gestión de apartados","devoluciones.html":"Control de devoluciones",
     "admin.html":"Administración de inventario","compras.html":"Control de compras","gastos.html":"Gastos y flujo",
     "clientes.html":"Gestión de clientes","cuentas-cobrar.html":"Cuentas por cobrar","reportes.html":"Análisis y reportes",
-    "configuracion.html":"Configuración","diagnostico.html":"Diagnóstico del sistema","usuarios.html":"Usuarios y permisos"
+    "configuracion.html":"Configuración","diagnostico.html":"Diagnóstico del sistema","migracion.html":"Migración a SQLite","usuarios.html":"Usuarios y permisos"
   };
 
   const paginaActual = () => location.pathname.split("/").pop() || "dashboard.html";

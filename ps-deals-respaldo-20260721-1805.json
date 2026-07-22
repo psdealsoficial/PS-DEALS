@@ -1,0 +1,440 @@
+{
+  "app": "PS Deals",
+  "version": "2.5",
+  "exportadoEn": "2026-07-22T00:05:50.025Z",
+  "datos": {
+    "configuracion": {
+      "negocioNombre": "PS Deals",
+      "negocioSlogan": "Las mejores ofertas, cerca de ti",
+      "negocioTelefono": "4921161742",
+      "negocioCorreo": "psdealsoficial@gmail.com",
+      "negocioDireccion": "San Rafael 6 Col. San Cosme Gpe. Zacatecas",
+      "negocioRFC": "",
+      "negocioWhatsApp": "4921161742",
+      "negocioRedes": "",
+      "negocioMoneda": "MXN",
+      "negocioImpuesto": 0,
+      "stockMinimoDefault": 2,
+      "ticketEncabezado": "PS Deals",
+      "ticketPie": "Gracias por tu compra.",
+      "ticketMostrarTelefono": true,
+      "ticketMostrarDireccion": true,
+      "ticketTamano": "80",
+      "ticketLogo": "img/logo/Logo.png",
+      "ticketMostrarQR": true,
+      "ticketMostrarCodigo": true,
+      "ultimoRespaldo": "2026-07-21T17:57:11.687Z"
+    },
+    "productos": [
+      {
+        "id": "1",
+        "nombre": "JBL Flip 6",
+        "categoria": "Audio",
+        "descripcion": "Bocina Bluetooth portátil, resistente al agua y con sonido potente.",
+        "sku": "PS-0001",
+        "proveedor": "",
+        "costo": 0,
+        "stock": 9,
+        "stockMinimo": 2,
+        "precio": 1899,
+        "antes": 2499,
+        "imagen": "img/productos/jbl-flip-6.jpg",
+        "estrellas": 4.8,
+        "opiniones": 284,
+        "envio": "Entrega Local",
+        "nuevo": true,
+        "destacado": true,
+        "disponible": true,
+        "codigoBarras": ""
+      },
+      {
+        "id": "2",
+        "nombre": "SSD Kingston NV2 1TB",
+        "categoria": "Tecnología",
+        "descripcion": "Unidad de estado sólido NVMe de alta velocidad para computadora o laptop.",
+        "sku": "PS-0002",
+        "proveedor": "",
+        "costo": 0,
+        "stock": 5,
+        "stockMinimo": 2,
+        "precio": 1099,
+        "antes": 1399,
+        "imagen": "img/productos/ssd-kingston-1tb.jpg",
+        "estrellas": 4.7,
+        "opiniones": 198,
+        "envio": "Entrega Local",
+        "nuevo": false,
+        "destacado": true,
+        "disponible": true,
+        "codigoBarras": ""
+      },
+      {
+        "id": "3",
+        "nombre": "Freidora de Aire Ninja",
+        "categoria": "Hogar",
+        "descripcion": "Freidora de aire de gran capacidad para preparar alimentos con menos aceite.",
+        "sku": "PS-0003",
+        "proveedor": "",
+        "costo": 0,
+        "stock": 17,
+        "stockMinimo": 2,
+        "precio": 2299,
+        "antes": 2999,
+        "imagen": "img/productos/freidora-ninja.jpg",
+        "estrellas": 4.9,
+        "opiniones": 326,
+        "envio": "Bajo pedido",
+        "nuevo": true,
+        "destacado": false,
+        "disponible": true,
+        "codigoBarras": ""
+      },
+      {
+        "id": "4",
+        "nombre": "Taladro Bosch",
+        "categoria": "Herramientas",
+        "descripcion": "Taladro compacto y potente, ideal para trabajos domésticos y profesionales.",
+        "sku": "PS-0004",
+        "proveedor": "",
+        "costo": 0,
+        "stock": 25,
+        "stockMinimo": 2,
+        "precio": 1499,
+        "antes": 1899,
+        "imagen": "img/productos/taladro-bosch.jpg",
+        "estrellas": 4.6,
+        "opiniones": 142,
+        "envio": "Entrega Local",
+        "nuevo": false,
+        "destacado": false,
+        "disponible": true,
+        "codigoBarras": ""
+      },
+      {
+        "id": "5",
+        "nombre": "PlayStation 5 Slim",
+        "categoria": "Gaming",
+        "descripcion": "Play station 5 Lector de discos",
+        "sku": "PS-0005",
+        "proveedor": "",
+        "costo": 0,
+        "stock": 13,
+        "stockMinimo": 2,
+        "precio": 10999,
+        "antes": 12999,
+        "imagen": "img/productos/play5.jpg",
+        "estrellas": 4.8,
+        "opiniones": 0,
+        "envio": "Entrega Local",
+        "nuevo": false,
+        "destacado": false,
+        "disponible": true,
+        "codigoBarras": ""
+      },
+      {
+        "id": "6",
+        "nombre": "XBOX 360 PLUS",
+        "categoria": "Gaming",
+        "descripcion": "XBOX 360 PLUS SIN DISCO UNIDA SOLIDA DE 500GB",
+        "sku": "PS-0006",
+        "proveedor": "",
+        "costo": 0,
+        "stock": 9,
+        "stockMinimo": 2,
+        "precio": 9500,
+        "antes": 10500,
+        "imagen": "img/productos/sin-imagen.jpg",
+        "estrellas": 4.8,
+        "opiniones": 0,
+        "envio": "Entrega Local",
+        "nuevo": true,
+        "destacado": false,
+        "disponible": true,
+        "codigoBarras": ""
+      },
+      {
+        "id": "7",
+        "nombre": "PS VITA",
+        "categoria": "Gaming",
+        "descripcion": "PS VITA 2000",
+        "precio": 3500,
+        "antes": 3200,
+        "costo": 0,
+        "stock": 15,
+        "stockMinimo": 2,
+        "sku": "PS-0007",
+        "codigoBarras": "",
+        "proveedor": "",
+        "imagen": "img/productos/sin-imagen.jpg",
+        "disponible": true
+      }
+    ],
+    "ventas": [
+      {
+        "id": 1784657637034,
+        "folio": "PS-57637034",
+        "fecha": "2026-07-21T18:13:57.034Z",
+        "cliente": "PEDRO SANCHEZ LOPEZ",
+        "telefono": "4921161742",
+        "metodoPago": "Efectivo",
+        "notas": "",
+        "items": [
+          {
+            "productoId": 5,
+            "producto": "PlayStation 5 Slim",
+            "sku": "PS-0005",
+            "precioUnitario": 10999,
+            "costoUnitario": 0,
+            "cantidad": 1,
+            "importe": 10999,
+            "ganancia": 10999
+          }
+        ],
+        "cantidad": 1,
+        "subtotal": 10999,
+        "descuento": 0,
+        "total": 10999,
+        "ganancia": 10999
+      },
+      {
+        "id": 1784651574180,
+        "folio": "PS-51574180",
+        "fecha": "2026-07-21T16:32:54.180Z",
+        "cliente": "PEDRO SANCHEZ LOPEZ",
+        "telefono": "4921161742",
+        "metodoPago": "Tarjeta",
+        "notas": "",
+        "items": [
+          {
+            "productoId": 3,
+            "producto": "Freidora de Aire Ninja",
+            "sku": "PS-0003",
+            "precioUnitario": 2299,
+            "costoUnitario": 0,
+            "cantidad": 1,
+            "importe": 2299,
+            "ganancia": 2299
+          }
+        ],
+        "cantidad": 1,
+        "subtotal": 2299,
+        "descuento": 0,
+        "total": 2299,
+        "ganancia": 2299
+      },
+      {
+        "id": 1784651181755,
+        "folio": "PS-51181755",
+        "fecha": "2026-07-21T16:26:21.755Z",
+        "cliente": "PEDRO SANCHEZ LOPEZ",
+        "telefono": "4921161742",
+        "metodoPago": "Transferencia",
+        "notas": "compra de 2 consolas",
+        "items": [
+          {
+            "productoId": 5,
+            "producto": "PlayStation 5 Slim",
+            "sku": "PS-0005",
+            "precioUnitario": 10999,
+            "costoUnitario": 0,
+            "cantidad": 1,
+            "importe": 10999,
+            "ganancia": 10999
+          },
+          {
+            "productoId": 6,
+            "producto": "XBOX 360 PLUS",
+            "sku": "PS-0006",
+            "precioUnitario": 9500,
+            "costoUnitario": 0,
+            "cantidad": 1,
+            "importe": 9500,
+            "ganancia": 9500
+          }
+        ],
+        "cantidad": 2,
+        "subtotal": 20499,
+        "descuento": 500,
+        "total": 19999,
+        "ganancia": 19999
+      }
+    ],
+    "clientes": [
+      {
+        "id": 1784655688049,
+        "nombre": "PEDRO SANCHEZ LOPEZ",
+        "telefono": "4921161742",
+        "correo": "",
+        "direccion": "",
+        "notas": "Cliente detectado automáticamente desde ventas.",
+        "creadoEn": "2026-07-21T16:32:54.180Z",
+        "actualizadoEn": "2026-07-21T17:41:27.592Z"
+      }
+    ],
+    "cuentasCobrar": [],
+    "compras": [],
+    "proveedores": [],
+    "gastos": [],
+    "devoluciones": [],
+    "apartados": [],
+    "usuarios": [
+      {
+        "id": 1784595999746,
+        "nombre": "Administrador",
+        "usuario": "admin",
+        "passwordHash": "fdc422fd",
+        "rol": "Administrador",
+        "permisos": [
+          "dashboard",
+          "ventas",
+          "apartados",
+          "devoluciones",
+          "inventario",
+          "compras",
+          "gastos",
+          "clientes",
+          "cobrar",
+          "reportes",
+          "configuracion",
+          "usuarios",
+          "notificaciones",
+          "actividad",
+          "diagnostico"
+        ],
+        "activo": true,
+        "creado": "2026-07-21T01:06:39.746Z",
+        "ultimoAcceso": "2026-07-21T17:50:19.858Z"
+      }
+    ],
+    "bitacora": [
+      {
+        "id": 1784596200088,
+        "fecha": "2026-07-21T01:09:59.353Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inicio de sesión",
+        "detalle": "Acceso al sistema"
+      },
+      {
+        "id": 1784596229695,
+        "fecha": "2026-07-21T01:10:29.419Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Cierre de sesión",
+        "detalle": "Salida del sistema"
+      },
+      {
+        "id": 1784596238729,
+        "fecha": "2026-07-21T01:10:38.563Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inicio de sesión",
+        "detalle": "Acceso al sistema"
+      },
+      {
+        "id": 1784596266620,
+        "fecha": "2026-07-21T01:11:05.766Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Cierre de sesión",
+        "detalle": "Salida del sistema"
+      },
+      {
+        "id": 1784596271963,
+        "fecha": "2026-07-21T01:11:11.559Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inicio de sesión",
+        "detalle": "Acceso al sistema"
+      },
+      {
+        "id": 1784596332978,
+        "fecha": "2026-07-21T01:12:12.602Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inicio de sesión",
+        "detalle": "Acceso al sistema"
+      },
+      {
+        "id": 1784596362243,
+        "fecha": "2026-07-21T01:12:41.762Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Cierre de sesión",
+        "detalle": "Salida del sistema"
+      },
+      {
+        "id": 1784596364728,
+        "fecha": "2026-07-21T01:12:43.943Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inicio de sesión",
+        "detalle": "Acceso al sistema"
+      },
+      {
+        "id": 1784645142966,
+        "fecha": "2026-07-21T14:45:42.669Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Cierre de sesión",
+        "detalle": "Salida del sistema"
+      },
+      {
+        "id": 1784645151312,
+        "fecha": "2026-07-21T14:45:50.731Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inicio de sesión",
+        "detalle": "Acceso al sistema"
+      },
+      {
+        "id": 1784656156642,
+        "fecha": "2026-07-21T17:49:16.350Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inicio de sesión",
+        "detalle": "Acceso al sistema"
+      },
+      {
+        "id": 1784656220053,
+        "fecha": "2026-07-21T17:50:19.858Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inicio de sesión",
+        "detalle": "Acceso al sistema"
+      },
+      {
+        "id": 1784657637980,
+        "fecha": "2026-07-21T18:13:57.035Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inventario actualizado",
+        "detalle": "6 registros (+0)"
+      },
+      {
+        "id": 1784657637845,
+        "fecha": "2026-07-21T18:13:57.035Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Ventas actualizadas",
+        "detalle": "3 registros (+1)"
+      },
+      {
+        "id": 1784657770480,
+        "fecha": "2026-07-21T18:16:09.572Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Actividad exportada",
+        "detalle": "2 eventos en CSV"
+      },
+      {
+        "id": 1784676968855,
+        "fecha": "2026-07-21T23:36:08.284Z",
+        "usuarioId": 1784595999746,
+        "usuario": "Administrador",
+        "accion": "Inventario actualizado",
+        "detalle": "7 registros (+1)"
+      }
+    ]
+  }
+}
