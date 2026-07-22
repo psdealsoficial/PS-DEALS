@@ -23,6 +23,10 @@
     updateClient: (id, cliente) => request(`/api/catalog/clients/${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(cliente) }),
     deleteClient: id => request(`/api/catalog/clients/${encodeURIComponent(id)}`, { method: "DELETE" }),
     saveClients: clientes => request("/api/catalog/clients", { method: "PUT", body: JSON.stringify({ clientes }) }),
+    sales: () => request("/api/sales"),
+    sale: id => request(`/api/sales/${encodeURIComponent(id)}`),
+    createSale: venta => request("/api/sales", { method: "POST", body: JSON.stringify(venta) }),
+    cancelSale: (id, motivo = "") => request(`/api/sales/${encodeURIComponent(id)}/cancel`, { method: "POST", body: JSON.stringify({ motivo }) }),
     systemStatus: () => request("/api/system/status"),
     tests: () => request("/api/tests")
   };

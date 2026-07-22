@@ -76,7 +76,7 @@
     agregar("Favoritos por usuario", productividad?.renderFavoritosSidebar && Array.isArray(favoritos) ? "ok" : "bad", productividad ? `${favoritos.length} favorito(s) guardado(s) en ${favKey}.` : "El servicio de favoritos no está disponible.", "bi-star-fill");
     agregar("Ayuda contextual", productividad?.tieneAyuda?.() ? "ok" : "bad", productividad?.tieneAyuda?.() ? "El botón de ayuda contextual está visible." : "No se encontró el botón de ayuda.", "bi-question-circle");
     agregar("Atajos de teclado", document.documentElement.dataset.psUx === "3.9.1" ? "ok" : "warn", document.documentElement.dataset.psUx ? `UX activa: v${document.documentElement.dataset.psUx}.` : "No se confirmó la inicialización de UX.", "bi-keyboard");
-    agregar("Versión del sistema", info.version === "4.1.2" ? "ok" : "warn", `Versión detectada: ${info.version}; build ${info.build}.`, "bi-tag");
+    agregar("Versión del sistema", info.version === "4.2.0" ? "ok" : "warn", `Versión detectada: ${info.version}; build ${info.build}.`, "bi-tag");
     if (window.PSApi?.health) {
       try {
         const health = await window.PSApi.health();

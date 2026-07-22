@@ -1,3 +1,27 @@
+
+## v4.3.3 — Corrección de renderizado del Kardex
+
+- Corrige el error `Cannot read properties of null (reading 'classList')`.
+- El aviso vacío ahora es opcional y no bloquea la tabla.
+- Los KPIs y la tabla se renderizan de forma más resistente.
+- Se diferencian mejor los errores de interfaz y conexión.
+- Se actualiza la caché de `kardex.js` a la versión 4.3.3.
+
+## [4.3.0] - 2026-07-22
+
+### Añadido
+- Kardex profesional consultado directamente desde SQLite.
+- Filtros por producto, tipo, fechas y búsqueda libre.
+- Saldos anterior/nuevo, referencias, motivos y usuario.
+- Exportación CSV e impresión/PDF.
+- Ajustes por conteo físico dentro de una transacción.
+- Preparación inicial para múltiples almacenes.
+- Nuevas pruebas de almacenes y saldos del Kardex.
+
+## v4.2.1 — Abastecimiento SQLite
+- Proveedores, compras, costo promedio y Kardex en SQLite.
+- Cancelación transaccional de compras.
+
 ## v4.1.2 — Clientes completamente en SQLite
 
 - Alta, edición, búsqueda y baja lógica de clientes mediante API.
@@ -129,3 +153,10 @@
 - Panel Servidor y SQLite.
 - Endpoints `/api/sync/push` y `/api/sync/status`.
 - Prueba de sincronización dual en Diagnóstico.
+
+## v4.2.0 — Motor de ventas SQLite
+- Ventas y detalles almacenados directamente en SQLite.
+- Transacciones atómicas con validación de stock.
+- Folios automáticos y kardex de salidas.
+- Cancelación lógica con devolución de inventario.
+- Historial y tickets conectados a la API.

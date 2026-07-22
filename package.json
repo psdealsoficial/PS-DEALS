@@ -1,8 +1,8 @@
 {
   "name": "ps-deals",
-  "version": "4.1.2",
+  "version": "4.3.3",
   "private": true,
-  "description": "PS Deals v4.1.2 - clientes completamente en SQLite",
+  "description": "PS Deals v4.3.3 - Corrección de renderizado del Kardex",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",

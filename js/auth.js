@@ -15,6 +15,7 @@
     "devoluciones.html": "devoluciones",
     "admin.html": "inventario",
     "compras.html": "compras",
+    "kardex.html": "kardex",
     "gastos.html": "gastos",
     "clientes.html": "clientes",
     "cuentas-cobrar.html": "cobrar",
@@ -29,15 +30,15 @@
   const ROLES = {
     Administrador: [
       "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
-      "gastos","clientes","cobrar","reportes","configuracion","diagnostico","migracion","servidor","usuarios"
+      "kardex","gastos","clientes","cobrar","reportes","configuracion","diagnostico","migracion","servidor","usuarios"
     ],
     Supervisor: [
       "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
-      "gastos","clientes","cobrar","reportes"
+      "kardex","gastos","clientes","cobrar","reportes"
     ],
     Cajero: ["dashboard","notificaciones","actividad","ventas","apartados","devoluciones","clientes","cobrar"],
     Vendedor: ["dashboard","notificaciones","actividad","ventas","apartados","clientes"],
-    Almacen: ["dashboard","notificaciones","actividad","inventario","compras"]
+    Almacen: ["dashboard","notificaciones","actividad","inventario","compras","kardex"]
   };
 
   function leer(clave, respaldo) {
@@ -268,6 +269,24 @@
     localStorage.setItem(clave, "ok");
   }
 
+  function migrarPermisosV431() {
+    const clave = "psdeals_migracion_permisos_v431";
+    const usuarios = asegurarAdministrador();
+    let cambio = false;
+    usuarios.forEach(usuario => {
+      const rol = String(usuario.rol || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      if (["Administrador", "Supervisor", "Almacen"].includes(rol)) {
+        if (!Array.isArray(usuario.permisos)) usuario.permisos = [];
+        if (!usuario.permisos.includes("kardex")) {
+          usuario.permisos.push("kardex");
+          cambio = true;
+        }
+      }
+    });
+    if (cambio) guardar(K_USUARIOS, usuarios);
+    localStorage.setItem(clave, "ok");
+  }
+
   function activarRegistroAutomatico() {
     if (window.__psRegistroStorageActivo) return;
     window.__psRegistroStorageActivo = true;
@@ -364,6 +383,8 @@
 
   migrarPermisosV34();
   migrarPermisosV361();
+  migrarPermisosV401();
+  migrarPermisosV431();
   activarRegistroAutomatico();
   protegerPagina();
 })();

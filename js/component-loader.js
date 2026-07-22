@@ -1,11 +1,11 @@
 (() => {
   "use strict";
 
-  const VERSION = "4.0.1";
+  const VERSION = "4.3.1";
   const subtitulos = {
     "dashboard.html":"Panel ejecutivo","notificaciones.html":"Centro de alertas","actividad.html":"Bitácora inteligente",
     "ventas.html":"Punto de venta","apartados.html":"Gestión de apartados","devoluciones.html":"Control de devoluciones",
-    "admin.html":"Administración de inventario","compras.html":"Control de compras","gastos.html":"Gastos y flujo",
+    "admin.html":"Administración de inventario","compras.html":"Control de compras","kardex.html":"Kardex profesional","gastos.html":"Gastos y flujo",
     "clientes.html":"Gestión de clientes","cuentas-cobrar.html":"Cuentas por cobrar","reportes.html":"Análisis y reportes",
     "configuracion.html":"Configuración","diagnostico.html":"Diagnóstico del sistema","migracion.html":"Migración a SQLite","usuarios.html":"Usuarios y permisos"
   };
@@ -65,7 +65,7 @@
     const mount = document.getElementById(mountId);
     if (!mount || mount.dataset.loaded === "true") return;
     try {
-      mount.innerHTML = cargarSincrono("components/sidebar.html");
+      mount.innerHTML = cargarSincrono(`components/sidebar.html?v=${VERSION}`);
       configurarSidebar(mount);
     } catch (error) {
       console.error("PS Deals: error al cargar el sidebar", error);

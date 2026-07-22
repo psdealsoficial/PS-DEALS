@@ -488,96 +488,70 @@ function actualizarResumen() {
 }
 
 let ventaProcesando = false;
-formVenta.addEventListener("submit", evento => {
+formVenta.addEventListener("submit", async evento => {
     evento.preventDefault();
     if (ventaProcesando) {
         window.PSToast?.("La venta ya se está procesando.", "warning");
         return;
     }
-    ventaProcesando = true;
-    setTimeout(() => { ventaProcesando = false; }, 1200);
-
     if (!carrito.length) {
         mostrarMensaje("Agrega al menos un producto al carrito.", "warning");
         return;
     }
 
-    for (const item of carrito) {
-        const producto = productos.find(
-            producto => Number(producto.id) === Number(item.productoId)
-        );
+    ventaProcesando = true;
+    btnCobrar.disabled = true;
+    const textoOriginal = btnCobrar.innerHTML;
+    btnCobrar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
 
-        if (!producto || obtenerStock(producto) < item.cantidad) {
-            mostrarMensaje(
-                `El stock de ${item.producto} cambió. Revisa el carrito.`,
-                "danger"
-            );
-            return;
-        }
-    }
-
-    const totales = calcularTotalesCarrito();
-
-    const items = carrito.map(item => {
-        const importe = item.precioUnitario * item.cantidad;
-        const gananciaBruta =
-            (item.precioUnitario - item.costoUnitario) * item.cantidad;
-
-        return {
-            ...item,
-            importe,
-            ganancia: gananciaBruta
+    try {
+        const totales = calcularTotalesCarrito();
+        const payload = {
+            cliente: cliente.value.trim() || "Público general",
+            telefono: telefono.value.trim(),
+            metodoPago: metodoPago.value,
+            notas: notasVenta.value.trim(),
+            descuento: totales.descuento,
+            items: carrito.map(item => ({
+                productoId: Number(item.productoId),
+                cantidad: Number(item.cantidad)
+            }))
         };
-    });
 
-    const gananciaBruta = items.reduce(
-        (total, item) => total + item.ganancia,
-        0
-    );
+        if (!window.PSApi?.createSale) {
+            throw new Error("El motor SQLite de ventas no está disponible. Abre PS Deals desde npm start.");
+        }
 
-    const venta = {
-        id: Date.now(),
-        folio: `PS-${Date.now().toString().slice(-8)}`,
-        fecha: new Date().toISOString(),
-        cliente: cliente.value.trim() || "Público general",
-        telefono: telefono.value.trim(),
-        metodoPago: metodoPago.value,
-        notas: notasVenta.value.trim(),
-        items,
-        cantidad: totales.unidades,
-        subtotal: totales.subtotal,
-        descuento: totales.descuento,
-        total: totales.total,
-        ganancia: gananciaBruta - totales.descuento
-    };
+        const respuesta = await window.PSApi.createSale(payload);
+        const venta = respuesta.venta;
+        ventas.unshift(venta);
+        guardarVentas();
 
-    items.forEach(item => {
-        const producto = productos.find(
-            producto => Number(producto.id) === Number(item.productoId)
-        );
+        for (const actualizado of respuesta.productosActualizados || []) {
+            const producto = productos.find(item => Number(item.id) === Number(actualizado.id));
+            if (producto) {
+                producto.stock = Number(actualizado.stock);
+                producto.disponible = producto.stock > 0;
+            }
+        }
+        guardarProductos(productos);
 
-        producto.stock = obtenerStock(producto) - item.cantidad;
-        producto.disponible = producto.stock > 0;
-    });
-
-    ventas.unshift(venta);
-
-    guardarProductos(productos);
-    guardarVentas();
-
-    mostrarTicket(venta);
-
-    carrito = [];
-    formVenta.reset();
-    cliente.value = "Público general";
-    descuentoVenta.value = 0;
-
-    renderizarCarrito();
-    renderizarVentas();
-    mostrarMensaje(
-        "Venta cobrada y existencias actualizadas correctamente.",
-        "success"
-    );
+        mostrarTicket(venta);
+        carrito = [];
+        formVenta.reset();
+        cliente.value = "Público general";
+        descuentoVenta.value = 0;
+        renderizarCarrito();
+        renderizarVentas();
+        mostrarMensaje(`Venta ${venta.folio} registrada en SQLite correctamente.`, "success");
+    } catch (error) {
+        console.error("Error al registrar venta:", error);
+        mostrarMensaje(error.message || "No se pudo registrar la venta.", "danger");
+    } finally {
+        ventaProcesando = false;
+        btnCobrar.innerHTML = textoOriginal;
+        actualizarResumen();
+    }
 });
 
 function mostrarMensaje(texto, tipo) {
@@ -585,44 +559,39 @@ function mostrarMensaje(texto, tipo) {
     mensajeVenta.className = `alert alert-${tipo} mt-3 mb-0`;
 }
 
-function eliminarVenta(id) {
-    const venta = ventas.find(
-        item => Number(item.id) === Number(id)
+async function eliminarVenta(id) {
+    const venta = ventas.find(item => Number(item.id) === Number(id));
+    if (!venta || venta.estado === "cancelada") return;
+
+    const motivo = prompt(
+        `Cancelar la venta ${venta.folio || id}. Escribe el motivo:`,
+        "Cancelación solicitada"
     );
+    if (motivo === null) return;
 
-    if (!venta) {
-        return;
-    }
-
-    if (!confirm("¿Eliminar esta venta y devolver sus productos al inventario?")) {
-        return;
-    }
-
-    obtenerItemsVenta(venta).forEach(item => {
-        const producto = productos.find(
-            producto => Number(producto.id) === Number(item.productoId)
-        );
-
-        if (producto) {
-            producto.stock =
-                obtenerStock(producto) + Number(item.cantidad || 0);
-
-            producto.disponible = producto.stock > 0;
+    try {
+        if (!window.PSApi?.cancelSale) {
+            throw new Error("El motor SQLite de ventas no está disponible.");
         }
-    });
+        const respuesta = await window.PSApi.cancelSale(id, motivo.trim());
+        const indice = ventas.findIndex(item => Number(item.id) === Number(id));
+        if (indice >= 0) ventas[indice] = respuesta.venta;
+        guardarVentas();
 
-    ventas = ventas.filter(
-        item => Number(item.id) !== Number(id)
-    );
-
-    guardarProductos(productos);
-    guardarVentas();
-    renderizarVentas();
-
-    mostrarMensaje(
-        "Venta eliminada y existencias devueltas.",
-        "success"
-    );
+        for (const actualizado of respuesta.productosActualizados || []) {
+            const producto = productos.find(item => Number(item.id) === Number(actualizado.id));
+            if (producto) {
+                producto.stock = Number(actualizado.stock);
+                producto.disponible = producto.stock > 0;
+            }
+        }
+        guardarProductos(productos);
+        renderizarVentas();
+        mostrarMensaje("Venta cancelada y existencias devueltas mediante SQLite.", "success");
+    } catch (error) {
+        console.error("Error al cancelar venta:", error);
+        mostrarMensaje(error.message || "No se pudo cancelar la venta.", "danger");
+    }
 }
 
 function renderizarVentas() {
@@ -681,6 +650,7 @@ function renderizarVentas() {
 
                 <td>
                     <strong>${formatearMoneda(venta.total)}</strong>
+                    ${venta.estado === "cancelada" ? '<div><span class="badge text-bg-secondary">Cancelada</span></div>' : ""}
                 </td>
 
                 <td>${escaparHtml(venta.metodoPago || "Sin especificar")}</td>
@@ -698,9 +668,11 @@ function renderizarVentas() {
                         <button
                             type="button"
                             class="btn btn-sm btn-outline-danger"
-                            onclick="eliminarVenta(${venta.id})">
+                            onclick="eliminarVenta(${venta.id})"
+                            ${venta.estado === "cancelada" ? "disabled" : ""}
+                            title="${venta.estado === "cancelada" ? "Venta cancelada" : "Cancelar venta"}">
 
-                            <i class="bi bi-trash"></i>
+                            <i class="bi bi-x-circle"></i>
                         </button>
                     </div>
                 </td>
@@ -710,7 +682,8 @@ function renderizarVentas() {
 }
 
 function actualizarEstadisticas() {
-    const unidades = ventas.reduce(
+    const ventasActivas = ventas.filter(venta => venta.estado !== "cancelada");
+    const unidades = ventasActivas.reduce(
         (total, venta) =>
             total + obtenerItemsVenta(venta).reduce(
                 (acumulado, item) =>
@@ -720,17 +693,17 @@ function actualizarEstadisticas() {
         0
     );
 
-    const ingresos = ventas.reduce(
+    const ingresos = ventasActivas.reduce(
         (total, venta) => total + Number(venta.total || 0),
         0
     );
 
-    const ganancia = ventas.reduce(
+    const ganancia = ventasActivas.reduce(
         (total, venta) => total + Number(venta.ganancia || 0),
         0
     );
 
-    statVentas.textContent = ventas.length.toLocaleString("es-MX");
+    statVentas.textContent = ventasActivas.length.toLocaleString("es-MX");
     statUnidadesVendidas.textContent = unidades.toLocaleString("es-MX");
     statIngresos.textContent = formatearMoneda(ingresos);
     statGanancia.textContent = formatearMoneda(ganancia);
@@ -1093,6 +1066,19 @@ function exportarVentas() {
 
 btnExportarVentas.addEventListener("click", exportarVentas);
 
+async function cargarVentasDesdeSQLite() {
+    try {
+        if (!window.PSApi?.sales) throw new Error("API no disponible");
+        const respuesta = await window.PSApi.sales();
+        ventas = Array.isArray(respuesta.ventas) ? respuesta.ventas : [];
+        guardarVentas();
+    } catch (error) {
+        console.warn("Ventas: usando caché local temporal.", error.message);
+        mostrarMensaje("No se pudo consultar SQLite; se muestra la caché local.", "warning");
+    }
+    renderizarVentas();
+}
+
 renderizarCarrito();
-renderizarVentas();
+cargarVentasDesdeSQLite();
 busquedaProducto.focus();
