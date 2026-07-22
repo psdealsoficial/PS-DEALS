@@ -1,3 +1,12 @@
+## v4.4.1 — Estabilización de movimientos de caja
+
+- Corrige `FOREIGN KEY constraint failed` al registrar entradas, retiros, gastos y ajustes.
+- Valida el usuario local antes de escribirlo en la auditoría SQLite.
+- Apertura, movimientos y cierre de caja ahora son transacciones atómicas.
+- Evita movimientos guardados parcialmente cuando falla la auditoría.
+- Protege el formulario contra doble envío.
+- Agrega comprobación de claves foráneas al autotest.
+
 
 ## v4.3.3 — Corrección de renderizado del Kardex
 
@@ -160,3 +169,8 @@
 - Folios automáticos y kardex de salidas.
 - Cancelación lógica con devolución de inventario.
 - Historial y tickets conectados a la API.
+
+## v4.4.0 — Caja diaria y cortes
+- Motor SQLite de turnos de caja.
+- Ventas vinculadas a caja activa.
+- Entradas, retiros, gastos, ajustes y corte auditable.

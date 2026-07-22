@@ -3,14 +3,14 @@
   const info = window.PSSystemInfo || { version: "desconocida", build: "—" };
   const archivos = [
     ["Dashboard", "dashboard.html"], ["Ventas", "ventas.html"], ["Inventario", "admin.html"],
-    ["Clientes", "clientes.html"], ["Compras", "compras.html"], ["Gastos", "gastos.html"],
+    ["Caja diaria", "caja.html"], ["Clientes", "clientes.html"], ["Compras", "compras.html"], ["Gastos", "gastos.html"],
     ["Reportes", "reportes.html"], ["Actividad", "actividad.html"], ["Notificaciones", "notificaciones.html"],
     ["Configuración", "configuracion.html"]
   ];
   const paginasArquitectura = [
     ["Dashboard","dashboard.html"],["Notificaciones","notificaciones.html"],["Actividad","actividad.html"],
     ["Ventas","ventas.html"],["Apartados","apartados.html"],["Devoluciones","devoluciones.html"],
-    ["Inventario","admin.html"],["Compras","compras.html"],["Gastos","gastos.html"],["Clientes","clientes.html"],
+    ["Caja diaria","caja.html"],["Inventario","admin.html"],["Compras","compras.html"],["Gastos","gastos.html"],["Clientes","clientes.html"],
     ["Cuentas por cobrar","cuentas-cobrar.html"],["Reportes","reportes.html"],["Configuración","configuracion.html"],
     ["Diagnóstico","diagnostico.html"],["Usuarios","usuarios.html"]
   ];

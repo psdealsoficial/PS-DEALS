@@ -2,7 +2,7 @@
 const $ = id => document.getElementById(id);
 const modal = new bootstrap.Modal($("modalUsuario"));
 const MODULOS = [
-  ["dashboard","Dashboard"],["ventas","Caja y ventas"],["apartados","Apartados"],
+  ["dashboard","Dashboard"],["ventas","Ventas POS"],["caja","Caja diaria"],["apartados","Apartados"],
   ["devoluciones","Devoluciones"],["inventario","Inventario"],["compras","Compras"],
   ["gastos","Gastos y caja"],["clientes","Clientes"],["cobrar","Cuentas por cobrar"],
   ["reportes","Reportes"],["configuracion","Configuración"],["usuarios","Usuarios"]

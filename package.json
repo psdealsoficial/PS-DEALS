@@ -1,8 +1,8 @@
 {
   "name": "ps-deals",
-  "version": "4.3.3",
+  "version": "4.4.1",
   "private": true,
-  "description": "PS Deals v4.3.3 - Corrección de renderizado del Kardex",
+  "description": "PS Deals v4.4.1 - Estabilización de movimientos de caja",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",

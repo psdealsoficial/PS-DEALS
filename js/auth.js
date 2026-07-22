@@ -11,6 +11,7 @@
     "notificaciones.html": "notificaciones",
     "actividad.html": "actividad",
     "ventas.html": "ventas",
+    "caja.html": "caja",
     "apartados.html": "apartados",
     "devoluciones.html": "devoluciones",
     "admin.html": "inventario",
@@ -29,15 +30,15 @@
 
   const ROLES = {
     Administrador: [
-      "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
+      "dashboard","notificaciones","actividad","ventas","caja","apartados","devoluciones","inventario","compras",
       "kardex","gastos","clientes","cobrar","reportes","configuracion","diagnostico","migracion","servidor","usuarios"
     ],
     Supervisor: [
-      "dashboard","notificaciones","actividad","ventas","apartados","devoluciones","inventario","compras",
+      "dashboard","notificaciones","actividad","ventas","caja","apartados","devoluciones","inventario","compras",
       "kardex","gastos","clientes","cobrar","reportes"
     ],
-    Cajero: ["dashboard","notificaciones","actividad","ventas","apartados","devoluciones","clientes","cobrar"],
-    Vendedor: ["dashboard","notificaciones","actividad","ventas","apartados","clientes"],
+    Cajero: ["dashboard","notificaciones","actividad","ventas","caja","apartados","devoluciones","clientes","cobrar"],
+    Vendedor: ["dashboard","notificaciones","actividad","ventas","caja","apartados","clientes"],
     Almacen: ["dashboard","notificaciones","actividad","inventario","compras","kardex"]
   };
 

@@ -93,6 +93,34 @@ function auditClient(db, action, id, before, after) {
 }
 
 
+
+function validSqliteUserId(db, value) {
+  const id = Number(value || 0);
+  if (!Number.isInteger(id) || id <= 0) return null;
+  return db.prepare("SELECT id FROM usuarios WHERE id=? AND activo=1").get(id)?.id ?? null;
+}
+function cashErrorMessage(error) {
+  const message = String(error?.message || "No fue posible completar la operación de caja.");
+  if (/FOREIGN KEY constraint failed/i.test(message)) {
+    return "No se pudo relacionar el movimiento con un registro existente. Recarga la página e inténtalo nuevamente.";
+  }
+  return message;
+}
+
+function cashSessionToJson(row) {
+  if (!row) return null;
+  return { id:row.id, usuarioId:row.usuario_id, usuarioNombre:row.usuario_nombre, estado:row.estado, fondoInicial:Number(row.fondo_inicial||0), efectivoEsperado:row.efectivo_esperado == null ? null : Number(row.efectivo_esperado), efectivoContado:row.efectivo_contado == null ? null : Number(row.efectivo_contado), diferencia:row.diferencia == null ? null : Number(row.diferencia), observacionesApertura:row.observaciones_apertura||"", observacionesCierre:row.observaciones_cierre||"", abiertaAt:row.abierta_at, cerradaAt:row.cerrada_at };
+}
+function cashSummary(db, cajaId) {
+  const caja=db.prepare("SELECT * FROM cajas WHERE id=?").get(cajaId); if(!caja) throw new Error("Caja no encontrada.");
+  const movimientos=db.prepare("SELECT * FROM caja_movimientos WHERE caja_id=? ORDER BY datetime(fecha) DESC,id DESC").all(cajaId);
+  const sum=(types,method=null)=>movimientos.filter(m=>types.includes(m.tipo)&&(!method||String(m.metodo_pago).toLowerCase()===method.toLowerCase())).reduce((a,m)=>a+Number(m.monto||0),0);
+  const ventas=movimientos.filter(m=>m.tipo==="venta"), cancels=movimientos.filter(m=>m.tipo==="cancelacion_venta");
+  const porMetodo={}; for(const m of [...ventas,...cancels]) porMetodo[m.metodo_pago||"Otro"]=(porMetodo[m.metodo_pago||"Otro"]||0)+Number(m.monto||0);
+  const efectivoVentas=sum(["venta","cancelacion_venta"],"Efectivo"), entradas=sum(["entrada","ajuste"]), retiros=Math.abs(sum(["retiro","gasto"]));
+  return { caja:cashSessionToJson(caja), movimientos:movimientos.map(m=>({id:m.id,tipo:m.tipo,metodoPago:m.metodo_pago,monto:Number(m.monto),concepto:m.concepto,fecha:m.fecha,referenciaTipo:m.referencia_tipo,referenciaId:m.referencia_id})), ventasTotal:ventas.reduce((a,m)=>a+Number(m.monto),0)+cancels.reduce((a,m)=>a+Number(m.monto),0), ventasCount:ventas.length, entradas, retiros, efectivoEsperado:Number(caja.fondo_inicial)+efectivoVentas+entradas-retiros, porMetodo };
+}
+
 function normalizeSalePayload(payload) {
   const items = Array.isArray(payload?.items) ? payload.items : [];
   if (!items.length) throw new Error("Agrega al menos un producto a la venta.");
@@ -242,7 +270,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.get("/api/database/stats", (req, res) => {
-  try { const db = getDatabase(); const tables = ["usuarios","clientes","productos","ventas","venta_detalles","proveedores","compras","compra_detalles","almacenes","movimientos_inventario","auditoria"]; const counts = Object.fromEntries(tables.map(table => [table, db.prepare(`SELECT COUNT(*) AS total FROM ${table}`).get().total])); const sizeBytes = fs.existsSync(DB_PATH) ? fs.statSync(DB_PATH).size : 0; res.json({ ok: true, counts, sizeBytes }); }
+  try { const db = getDatabase(); const tables = ["usuarios","clientes","productos","ventas","venta_detalles","proveedores","compras","compra_detalles","almacenes","movimientos_inventario","cajas","caja_movimientos","auditoria"]; const counts = Object.fromEntries(tables.map(table => [table, db.prepare(`SELECT COUNT(*) AS total FROM ${table}`).get().total])); const sizeBytes = fs.existsSync(DB_PATH) ? fs.statSync(DB_PATH).size : 0; res.json({ ok: true, counts, sizeBytes }); }
   catch (error) { res.status(503).json({ ok: false, error: error.message }); }
 });
 
@@ -496,9 +524,12 @@ app.post("/api/sales", (req, res) => {
         clienteId = found?.id || null;
       }
       const folio = nextSaleFolio(db);
-      const result = db.prepare(`INSERT INTO ventas (uuid,folio,cliente_id,usuario_id,fecha,subtotal,descuento,iva,total,ganancia,metodo_pago,estado,cliente_nombre,cliente_telefono,notas)
-        VALUES (?,?,?,?,CURRENT_TIMESTAMP,?,?,?,?,?,?, 'completada',?,?,?)`).run(data.uuid,folio,clienteId,data.usuarioId,subtotal,descuento,data.iva,total,ganancia,data.metodoPago,data.clienteNombre,data.clienteTelefono,data.notas);
+      const activeCash = data.usuarioId ? db.prepare("SELECT id FROM cajas WHERE estado='abierta' AND usuario_id=? ORDER BY id DESC LIMIT 1").get(data.usuarioId) : db.prepare("SELECT id FROM cajas WHERE estado='abierta' ORDER BY id DESC LIMIT 1").get();
+      const cajaId = activeCash?.id || null;
+      const result = db.prepare(`INSERT INTO ventas (uuid,folio,cliente_id,usuario_id,fecha,subtotal,descuento,iva,total,ganancia,metodo_pago,estado,cliente_nombre,cliente_telefono,notas,caja_id)
+        VALUES (?,?,?,?,CURRENT_TIMESTAMP,?,?,?,?,?,?, 'completada',?,?,?,?)`).run(data.uuid,folio,clienteId,data.usuarioId,subtotal,descuento,data.iva,total,ganancia,data.metodoPago,data.clienteNombre,data.clienteTelefono,data.notas,cajaId);
       const ventaId = Number(result.lastInsertRowid);
+      if (cajaId) db.prepare(`INSERT INTO caja_movimientos(caja_id,tipo,metodo_pago,monto,concepto,referencia_tipo,referencia_id,usuario_id) VALUES(?,'venta',?,?,'Venta '+?,'venta',?,?)`).run(cajaId,data.metodoPago,total,folio,ventaId,data.usuarioId);
       const detailStmt = db.prepare(`INSERT INTO venta_detalles (venta_id,producto_id,descripcion,cantidad,precio_unitario,costo_unitario,importe) VALUES (?,?,?,?,?,?,?)`);
       const stockStmt = db.prepare("UPDATE productos SET stock=?,updated_at=CURRENT_TIMESTAMP WHERE id=?");
       const movementStmt = db.prepare(`INSERT INTO movimientos_inventario (producto_id,tipo,cantidad,existencia_anterior,existencia_nueva,referencia_tipo,referencia_id,motivo,usuario_id) VALUES (?,?,?,?,?,'venta',?,'Salida por venta',?)`);
@@ -544,6 +575,7 @@ app.post("/api/sales/:id/cancel", (req, res) => {
         stockStmt.run(next,product.id); movementStmt.run(product.id,"entrada",Number(detail.cantidad),prior,next,id,userId); updated.push({id:product.id,stock:next});
       }
       db.prepare("UPDATE ventas SET estado='cancelada',cancelada_at=CURRENT_TIMESTAMP,motivo_cancelacion=? WHERE id=?").run(reason,id);
+      if (before.caja_id) db.prepare(`INSERT INTO caja_movimientos(caja_id,tipo,metodo_pago,monto,concepto,referencia_tipo,referencia_id,usuario_id) VALUES(?,'cancelacion_venta',?,?,'Cancelación '+?,'venta',?,?)`).run(before.caja_id,before.metodo_pago,-Number(before.total||0),before.folio,id,userId);
       const after=db.prepare("SELECT * FROM ventas WHERE id=?").get(id);
       db.prepare("INSERT INTO auditoria (usuario_id,accion,entidad,entidad_id,datos_anteriores,datos_nuevos) VALUES (?,?,?,?,?,?)")
         .run(userId,"Venta cancelada","ventas",String(id),JSON.stringify(before),JSON.stringify(after));
@@ -557,6 +589,59 @@ app.post("/api/sales/:id/cancel", (req, res) => {
 });
 
 
+
+// Caja diaria y cortes v4.4.1
+app.get("/api/cash/current", (req,res)=>{ try { const db=getDatabase(),uid=Number(req.query.usuarioId||0); const row=uid?db.prepare("SELECT * FROM cajas WHERE estado='abierta' AND usuario_id=? ORDER BY id DESC LIMIT 1").get(uid):db.prepare("SELECT * FROM cajas WHERE estado='abierta' ORDER BY id DESC LIMIT 1").get(); res.json({ok:true,source:"sqlite",caja:cashSessionToJson(row),resumen:row?cashSummary(db,row.id):null}); } catch(error){res.status(500).json({ok:false,error:cashErrorMessage(error)});} });
+app.get("/api/cash/sessions", (req,res)=>{ try { const db=getDatabase(); const rows=db.prepare("SELECT * FROM cajas ORDER BY datetime(abierta_at) DESC,id DESC LIMIT 500").all(); res.json({ok:true,source:"sqlite",cajas:rows.map(r=>cashSessionToJson(r))}); } catch(error){res.status(500).json({ok:false,error:cashErrorMessage(error)});} });
+app.get("/api/cash/:id/summary", (req,res)=>{ try { const db=getDatabase(),result=cashSummary(db,Number(req.params.id)); res.json({ok:true,source:"sqlite",...result}); } catch(error){res.status(404).json({ok:false,error:cashErrorMessage(error)});} });
+app.post("/api/cash/open", (req,res)=>{
+  try {
+    const db=getDatabase(),rawUid=Number(req.body?.usuarioId||0)||null,name=cleanText(req.body?.usuarioNombre,200)||"Administrador",fund=Math.max(0,number(req.body?.fondoInicial)),obs=cleanText(req.body?.observaciones,2000)||null;
+    const open=db.transaction(()=>{
+      const existing=rawUid?db.prepare("SELECT id FROM cajas WHERE estado='abierta' AND usuario_id=?").get(rawUid):db.prepare("SELECT id FROM cajas WHERE estado='abierta' AND usuario_id IS NULL").get();
+      if(existing) throw new Error("Este usuario ya tiene una caja abierta.");
+      const r=db.prepare("INSERT INTO cajas(usuario_id,usuario_nombre,fondo_inicial,observaciones_apertura) VALUES(?,?,?,?)").run(rawUid,name,fund,obs);
+      const auditUid=validSqliteUserId(db,rawUid);
+      db.prepare("INSERT INTO auditoria(usuario_id,accion,entidad,entidad_id,datos_nuevos) VALUES(?,'Caja abierta','cajas',?,?)").run(auditUid,String(r.lastInsertRowid),JSON.stringify({fondoInicial:fund,usuarioNombre:name}));
+      return db.prepare("SELECT * FROM cajas WHERE id=?").get(r.lastInsertRowid);
+    });
+    res.status(201).json({ok:true,caja:cashSessionToJson(open.immediate())});
+  } catch(error){res.status(/ya tiene una caja/i.test(error.message)?409:400).json({ok:false,error:cashErrorMessage(error)});}
+});
+app.post("/api/cash/:id/movements", (req,res)=>{
+  try {
+    const db=getDatabase(),id=Number(req.params.id),tipo=cleanText(req.body?.tipo,40),amount=Math.abs(number(req.body?.monto)),concept=cleanText(req.body?.concepto,1000),rawUid=Number(req.body?.usuarioId||0)||null;
+    if(!["entrada","retiro","gasto","ajuste"].includes(tipo)) throw new Error("Tipo de movimiento inválido.");
+    if(amount<=0) throw new Error("El monto debe ser mayor que cero.");
+    if(!concept) throw new Error("Escribe el concepto del movimiento.");
+    const create=db.transaction(()=>{
+      const caja=db.prepare("SELECT * FROM cajas WHERE id=? AND estado='abierta'").get(id);
+      if(!caja) throw new Error("La caja no existe o ya está cerrada.");
+      const signed=["retiro","gasto"].includes(tipo)?-amount:amount;
+      const r=db.prepare("INSERT INTO caja_movimientos(caja_id,tipo,metodo_pago,monto,concepto,usuario_id) VALUES(?,?,'Efectivo',?,?,?)").run(id,tipo,signed,concept,rawUid);
+      const auditUid=validSqliteUserId(db,rawUid);
+      db.prepare("INSERT INTO auditoria(usuario_id,accion,entidad,entidad_id,datos_nuevos) VALUES(?,'Movimiento de caja','caja_movimientos',?,?)").run(auditUid,String(r.lastInsertRowid),JSON.stringify({cajaId:id,tipo,monto:signed,concepto:concept}));
+      return cashSummary(db,id);
+    });
+    res.status(201).json({ok:true,resumen:create.immediate()});
+  } catch(error){res.status(400).json({ok:false,error:cashErrorMessage(error)});}
+});
+app.post("/api/cash/:id/close", (req,res)=>{
+  try {
+    const db=getDatabase(),id=Number(req.params.id),count=Math.max(0,number(req.body?.efectivoContado)),obs=cleanText(req.body?.observaciones,2000)||null,rawUid=Number(req.body?.usuarioId||0)||null;
+    const close=db.transaction(()=>{
+      const caja=db.prepare("SELECT * FROM cajas WHERE id=? AND estado='abierta'").get(id);
+      if(!caja) throw new Error("La caja no existe o ya fue cerrada.");
+      const summary=cashSummary(db,id),diff=count-summary.efectivoEsperado;
+      db.prepare("UPDATE cajas SET estado='cerrada',efectivo_esperado=?,efectivo_contado=?,diferencia=?,observaciones_cierre=?,cerrada_at=CURRENT_TIMESTAMP WHERE id=?").run(summary.efectivoEsperado,count,diff,obs,id);
+      const after=db.prepare("SELECT * FROM cajas WHERE id=?").get(id);
+      const auditUid=validSqliteUserId(db,rawUid);
+      db.prepare("INSERT INTO auditoria(usuario_id,accion,entidad,entidad_id,datos_nuevos) VALUES(?,'Caja cerrada','cajas',?,?)").run(auditUid,String(id),JSON.stringify({esperado:summary.efectivoEsperado,contado:count,diferencia:diff}));
+      return after;
+    });
+    res.json({ok:true,caja:cashSessionToJson(close.immediate())});
+  } catch(error){res.status(400).json({ok:false,error:cashErrorMessage(error)});}
+});
 
 app.get("/api/suppliers", (req,res)=>{
   try { const rows=getDatabase().prepare("SELECT * FROM proveedores WHERE activo=1 ORDER BY nombre COLLATE NOCASE").all(); res.json({ok:true,source:"sqlite",proveedores:rows.map(supplierToLegacy),count:rows.length}); }
@@ -764,6 +849,6 @@ app.get("/", (req, res) => res.sendFile(path.join(ROOT, "login.html")));
 app.use(express.static(ROOT, { extensions: ["html"], index: false }));
 app.use((req, res) => res.status(404).json({ ok: false, error: "Ruta no encontrada" }));
 
-const server = app.listen(PORT, HOST, () => { console.log(`PS Deals v4.3.2 disponible en http://${HOST}:${PORT}`); console.log(startup.ok ? "SQLite conectado." : `SQLite pendiente: ${startup.error}`); });
+const server = app.listen(PORT, HOST, () => { console.log(`PS Deals v4.4.1 disponible en http://${HOST}:${PORT}`); console.log(startup.ok ? "SQLite conectado." : `SQLite pendiente: ${startup.error}`); });
 function shutdown(signal) { console.log(`\n${signal}: cerrando PS Deals...`); server.close(() => { closeDatabase(); process.exit(0); }); }
 process.on("SIGINT", () => shutdown("SIGINT")); process.on("SIGTERM", () => shutdown("SIGTERM"));
